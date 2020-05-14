@@ -10,15 +10,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
 
     ui->setupUi(this);
 
-    zBox = ui->zBox;
-    tBox = ui->tBox;
+    zLine = ui->zLine;
+    tLine = ui->tLine;
 
-    for(int i = 0; i < MAX; i++){
-        zBox->addItem(QString::number(i));
-        tBox->addItem(QString::number(i));
-    }
+    ui->Voltages->setStyleSheet("background-color:white;");
+    ui->Resistances->setStyleSheet("background-color:white;");
 
     QSize iconsSize(46, 46);
+
+    ui->zLine->setText("0");
+    ui->tLine->setText("0");
 
     ui->firstV->setIcon(QIcon(":/icons/firstV.png"));
     ui->secondV->setIcon(QIcon(":/icons/secondV.png"));
@@ -40,10 +41,43 @@ MainWindow::~MainWindow() {
     delete ui;
 }
 
-void MainWindow::on_zBox_currentIndexChanged(int index){
-    std::cout << index << std::endl;
+void MainWindow::on_zLine_textChanged(const QString &arg1){
+    std::string edit = arg1.toStdString();
+
+    if(arg1.contains('.')){
+        int index = arg1.indexOf('.');
+        edit.replace(index, 1, ",");
+    }
+
+    float fixZ;
+    try{
+        fixZ = std::stof(edit);
+        std::cout << "fix Z: " << fixZ << std::endl;
+    }catch(std::invalid_argument e){
+        zLine->setText("0");
+    }catch(std::out_of_range e2){
+        zLine->setText("0");
+    }
 }
 
-void MainWindow::on_tBox_currentIndexChanged(int index){
-    std::cout << index << std::endl;
+void MainWindow::on_tLine_textChanged(const QString &arg1){
+    std::string edit = arg1.toStdString();
+
+    if(arg1.contains('.')){
+        int index = arg1.indexOf('.');
+        edit.replace(index, 1, ",");
+    }
+
+    float fixT;
+    try{
+        fixT = std::stof(edit);
+        std::cout << "fix T: " << fixT << std::endl;
+    }catch(std::invalid_argument e){
+        tLine->setText("0");
+    }catch(std::out_of_range e2){
+        tLine->setText("0");
+    }
+
 }
+
+

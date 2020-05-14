@@ -15,20 +15,16 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-signals:
-    void timeChanged(int newTime);
-    void zPosChanged(int newZPos);
-
 private slots:
-    void on_zBox_currentIndexChanged(int index);
-    void on_tBox_currentIndexChanged(int index);
+    void on_tLine_textChanged(const QString &arg1);
+    void on_zLine_textChanged(const QString &arg1);
 
-    void on_firstV_clicked();
+    void on_firstV_clicked(bool checked);
 
 private:
     Ui::MainWindow *ui;
-    QComboBox *zBox;
-    QComboBox *tBox;
+    QLineEdit *zLine;
+    QLineEdit *tLine;
 };
 
 #endif // MAINWINDOW_H
