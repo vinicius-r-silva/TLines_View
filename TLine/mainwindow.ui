@@ -13,8 +13,8 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralWidget">
-   <widget class="QGroupBox" name="groupBox">
+  <widget class="QWidget" name="TLines">
+   <widget class="QGroupBox" name="Voltages">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -26,7 +26,10 @@
     <property name="title">
      <string>Voltages</string>
     </property>
-    <widget class="QRadioButton" name="radioButton">
+    <widget class="QRadioButton" name="firstV">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -35,11 +38,23 @@
        <height>23</height>
       </rect>
      </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
      <property name="text">
-      <string>u(t)</string>
+      <string notr="true"/>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>48</width>
+       <height>48</height>
+      </size>
+     </property>
+     <property name="shortcut">
+      <string/>
      </property>
     </widget>
-    <widget class="QRadioButton" name="radioButton_2">
+    <widget class="QRadioButton" name="secondV">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -49,11 +64,11 @@
       </rect>
      </property>
      <property name="text">
-      <string>u(t) - u(t - l/10uf)</string>
+      <string/>
      </property>
     </widget>
    </widget>
-   <widget class="QGroupBox" name="groupBox_2">
+   <widget class="QGroupBox" name="Resistances">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -65,7 +80,7 @@
     <property name="title">
      <string>Resistances</string>
     </property>
-    <widget class="QRadioButton" name="radioButton_3">
+    <widget class="QRadioButton" name="firstR">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -75,10 +90,10 @@
       </rect>
      </property>
      <property name="text">
-      <string>infinite</string>
+      <string/>
      </property>
     </widget>
-    <widget class="QRadioButton" name="radioButton_4">
+    <widget class="QRadioButton" name="secondR">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -88,10 +103,10 @@
       </rect>
      </property>
      <property name="text">
-      <string>0</string>
+      <string/>
      </property>
     </widget>
-    <widget class="QRadioButton" name="radioButton_5">
+    <widget class="QRadioButton" name="thirdR">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -101,11 +116,11 @@
       </rect>
      </property>
      <property name="text">
-      <string>100 ohms</string>
+      <string/>
      </property>
     </widget>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="zGraphic">
     <property name="geometry">
      <rect>
       <x>460</x>
@@ -127,7 +142,7 @@
      <string>TextLabel</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_2">
+   <widget class="QLabel" name="tGraphic">
     <property name="geometry">
      <rect>
       <x>460</x>
@@ -143,7 +158,7 @@
      <string>TextLabel</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="comboBox">
+   <widget class="QComboBox" name="zBox">
     <property name="geometry">
      <rect>
       <x>350</x>
@@ -153,7 +168,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLabel" name="label_3">
+   <widget class="QLabel" name="z_Fixo">
     <property name="geometry">
      <rect>
       <x>290</x>
@@ -166,7 +181,7 @@
      <string>z Fixo:</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="comboBox_2">
+   <widget class="QComboBox" name="tBox">
     <property name="geometry">
      <rect>
       <x>350</x>
@@ -176,7 +191,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLabel" name="label_4">
+   <widget class="QLabel" name="t_Fixo">
     <property name="geometry">
      <rect>
       <x>290</x>
@@ -189,6 +204,15 @@
      <string>t Fixo:</string>
     </property>
    </widget>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -209,15 +233,6 @@
    </widget>
    <addaction name="menuTransmission_Lines"/>
   </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-  </widget>
-  <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
