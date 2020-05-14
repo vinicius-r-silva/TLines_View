@@ -19,8 +19,6 @@ private slots:
     void on_tLine_textChanged(const QString &arg1);
     void on_zLine_textChanged(const QString &arg1);
 
-    void on_firstV_clicked(bool checked);
-
 private:
     Ui::MainWindow *ui;
     QLineEdit *zLine;
