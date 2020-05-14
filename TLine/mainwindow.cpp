@@ -81,3 +81,33 @@ void MainWindow::on_tLine_textChanged(const QString &arg1){
 }
 
 
+
+void MainWindow::on_firstV_clicked(){
+    if(ui->firstV->isChecked()){
+        zLine->setText("500");
+    }
+}
+
+void MainWindow::on_secondV_clicked(){
+    if(ui->secondV->isChecked()){
+        zLine->setText("200");
+    }
+}
+
+void MainWindow::on_firstR_clicked(){
+    if(ui->firstR->isChecked()){
+        tLine->setText("1000");
+    }
+}
+
+void MainWindow::on_secondR_clicked(){
+    if(ui->secondR->isChecked()){
+        tLine->setText("500");
+    }
+}
+
+void MainWindow::on_thirdR_clicked(){
+    if(ui->thirdR->isChecked()){
+        tLine->setText("200");
+    }
+}
