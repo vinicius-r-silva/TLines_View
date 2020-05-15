@@ -6,6 +6,5 @@ int main(int argc, char *argv[]) {
     TView w;
     w.show();
 
-
     return a.exec();
 }

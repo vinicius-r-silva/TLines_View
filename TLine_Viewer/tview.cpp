@@ -3,8 +3,6 @@
 
 #include <iostream>
 
-#define MAX 101
-
 TView::TView(QWidget *parent) : QMainWindow(parent),
     ui(new Ui::TView){
 
@@ -13,13 +11,17 @@ TView::TView(QWidget *parent) : QMainWindow(parent),
     zLine = ui->zLine;
     tLine = ui->tLine;
 
-    ui->Voltages->setStyleSheet("background-color:white;");
-    ui->Resistances->setStyleSheet("background-color:white;");
+    this->setStyleSheet("background-color: white;");
 
     QSize iconsSize(46, 46);
 
     ui->zLine->setText("0");
     ui->tLine->setText("0");
+
+    ui->dT->setText("0.01");
+    ui->nT->setText("10");
+    ui->dZ->setText("0.01");
+    ui->nZ->setText("10");
 
     ui->firstV->setIcon(QIcon(":/icons/firstV.png"));
     ui->secondV->setIcon(QIcon(":/icons/secondV.png"));
@@ -77,10 +79,7 @@ void TView::on_tLine_textChanged(const QString &arg1){
     }catch(std::out_of_range e2){
         tLine->setText("0");
     }
-
 }
-
-
 
 void TView::on_firstV_clicked(){
     if(ui->firstV->isChecked()){
@@ -109,5 +108,82 @@ void TView::on_secondR_clicked(){
 void TView::on_thirdR_clicked(){
     if(ui->thirdR->isChecked()){
         tLine->setText("200");
+    }
+}
+
+void TView::on_dT_textChanged(const QString &arg1){
+    std::string edit = arg1.toStdString();
+
+    if(arg1.contains('.')){
+        int index = arg1.indexOf('.');
+        edit.replace(uint32_t(index), 1, ",");
+    }
+
+    float dT;
+    try{
+        dT = std::stof(edit);
+        std::cout << "dT: " << dT << std::endl;
+    }catch(std::invalid_argument e){
+
+    }catch(std::out_of_range e2){
+
+    }
+}
+
+void TView::on_nT_textChanged(const QString &arg1){
+    std::string edit = arg1.toStdString();
+
+    if(arg1.contains('.')){
+        int index = arg1.indexOf('.');
+        edit.replace(uint32_t(index), 1, ",");
+    }
+
+    float nT;
+    try{
+        nT = std::stof(edit);
+        std::cout << "nT: " << nT << std::endl;
+    }catch(std::invalid_argument e){
+
+    }catch(std::out_of_range e2){
+
+    }
+}
+
+void TView::on_dZ_textChanged(const QString &arg1){
+    std::string edit = arg1.toStdString();
+
+    if(arg1.contains('.')){
+        int index = arg1.indexOf('.');
+        edit.replace(uint32_t(index), 1, ",");
+    }
+
+    float dZ;
+    try{
+        dZ = std::stof(edit);
+        std::cout << "dZ: " << dZ << std::endl;
+    }catch(std::invalid_argument e){
+
+    }catch(std::out_of_range e2){
+
+    }
+
+}
+
+void TView::on_nZ_textChanged(const QString &arg1){
+    std::string edit = arg1.toStdString();
+
+    if(arg1.contains('.')){
+        int index = arg1.indexOf('.');
+        edit.replace(uint32_t(index), 1, ",");
+    }
+
+    float nZ;
+    try{
+        nZ = std::stof(edit);
+        std::cout << "nZ: " << nZ << std::endl;
+    }catch(std::invalid_argument e){
+
+    }catch(std::out_of_range e2){
+
     }
 }
