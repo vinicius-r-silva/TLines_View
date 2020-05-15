@@ -1,9 +1,9 @@
-#include "mainwindow.h"
+#include "tview.h"
 #include <QApplication>
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
-    MainWindow w;
+    TView w;
     w.show();
 
 
