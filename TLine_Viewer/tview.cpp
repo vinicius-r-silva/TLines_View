@@ -1,12 +1,12 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "tview.h"
+#include "ui_tview.h"
 
 #include <iostream>
 
 #define MAX 101
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
-    ui(new Ui::MainWindow){
+TView::TView(QWidget *parent) : QMainWindow(parent),
+    ui(new Ui::TView){
 
     ui->setupUi(this);
 
@@ -37,16 +37,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
 
 }
 
-MainWindow::~MainWindow() {
+TView::~TView() {
     delete ui;
 }
 
-void MainWindow::on_zLine_textChanged(const QString &arg1){
+void TView::on_zLine_textChanged(const QString &arg1){
     std::string edit = arg1.toStdString();
 
     if(arg1.contains('.')){
         int index = arg1.indexOf('.');
-        edit.replace(index, 1, ",");
+        edit.replace(uint32_t(index), 1, ",");
     }
 
     float fixZ;
@@ -60,12 +60,12 @@ void MainWindow::on_zLine_textChanged(const QString &arg1){
     }
 }
 
-void MainWindow::on_tLine_textChanged(const QString &arg1){
+void TView::on_tLine_textChanged(const QString &arg1){
     std::string edit = arg1.toStdString();
 
     if(arg1.contains('.')){
         int index = arg1.indexOf('.');
-        edit.replace(index, 1, ",");
+        edit.replace(uint32_t(index), 1, ",");
     }
 
     float fixT;
@@ -82,31 +82,31 @@ void MainWindow::on_tLine_textChanged(const QString &arg1){
 
 
 
-void MainWindow::on_firstV_clicked(){
+void TView::on_firstV_clicked(){
     if(ui->firstV->isChecked()){
         zLine->setText("500");
     }
 }
 
-void MainWindow::on_secondV_clicked(){
+void TView::on_secondV_clicked(){
     if(ui->secondV->isChecked()){
         zLine->setText("200");
     }
 }
 
-void MainWindow::on_firstR_clicked(){
+void TView::on_firstR_clicked(){
     if(ui->firstR->isChecked()){
         tLine->setText("1000");
     }
 }
 
-void MainWindow::on_secondR_clicked(){
+void TView::on_secondR_clicked(){
     if(ui->secondR->isChecked()){
         tLine->setText("500");
     }
 }
 
-void MainWindow::on_thirdR_clicked(){
+void TView::on_thirdR_clicked(){
     if(ui->thirdR->isChecked()){
         tLine->setText("200");
     }

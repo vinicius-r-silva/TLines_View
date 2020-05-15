@@ -1,19 +1,19 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef TVIEW_H
+#define TVIEW_H
 
 #include <QMainWindow>
 #include <QtWidgets>
 
 namespace Ui {
-class MainWindow;
+class TView;
 }
 
-class MainWindow : public QMainWindow {
+class TView : public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    explicit TView(QWidget *parent = nullptr);
+    ~TView();
 
 private slots:
     void on_tLine_textChanged(const QString &arg1);
@@ -27,9 +27,9 @@ private slots:
     void on_thirdR_clicked();
 
 private:
-    Ui::MainWindow *ui;
+    Ui::TView *ui;
     QLineEdit *zLine;
     QLineEdit *tLine;
 };
 
-#endif // MAINWINDOW_H
+#endif // TVIEW_H
