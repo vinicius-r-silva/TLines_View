@@ -23,7 +23,7 @@ private:
     cv::Vec3b sycamore;
 
 public:
-    Graph();
+    Graph(functionData_t fdata, int widht, int height);
     cv::Mat print_img();
 
 };

@@ -9,6 +9,7 @@
 #include <stdlib.h>  
 #include <math.h>
 
+#include "function.h"
 #include "graph.h"
 
 #define _Z0 0
@@ -17,7 +18,7 @@
 #define _WIDTH 1000
 #define _HEIGHT 500
 #define _X_LABEL_SIZE 30
-#define _Y_LABEL_SIZE 50
+#define _Y_LABEL_SIZE 120
 #define _X_LABEL_DIST 100
 #define _Y_LABEL_DIST 40
 
@@ -44,8 +45,8 @@ cv::Mat Graph::print_img(){
     float Min_vo = -30;
     float range_vo = Max_vo - Min_vo;
 
-    float Max_ic = 30;
-    float Min_ic = -30;
+    float Max_ic = 50;
+    float Min_ic = -50;
     float range_ic = Max_ic - Min_ic;
 
     cv::Mat image(_HEIGHT, _WIDTH, CV_8UC3, white);
@@ -72,7 +73,7 @@ cv::Mat Graph::print_img(){
         if(voltage(dx * i) > max) max = voltage(dx * i);
         if(voltage(dx * i) < min) min = voltage(dx * i);
 
-        std::cout << voltage(dx * i) << std::endl;
+        // std::cout << voltage(dx * i) << std::endl;
 
         vo = (printable_height / 2) - vo;
         ic = (printable_height / 2) - ic;
@@ -82,7 +83,7 @@ cv::Mat Graph::print_img(){
         cv::circle(image, cv::Point(px, ic), 1, ic_color);
     }
 
-    std::cout << "max: " << max << ", min: " << min << std::endl;
+    // std::cout << "max: " << max << ", min: " << min << std::endl;
 
 
     //Axis values
@@ -99,9 +100,13 @@ cv::Mat Graph::print_img(){
     
     i = _Y_LABEL_DIST;
     for(; i < _HEIGHT - _Y_LABEL_DIST; i += _Y_LABEL_DIST){
-        sprintf(value, "%03.1f", dvo * i + Min_vo);
+        sprintf(value, "%6.1f,", dvo * i + Min_vo);
         textSize = getTextSize(value, cv::FONT_HERSHEY_PLAIN, 1, 1, 0);
         cv::putText(image, value, cv::Point(0, printable_height - i + textSize.height), cv::FONT_HERSHEY_PLAIN, 1, vo_color, 1);
+
+        sprintf(value, "%6.1f", dic * i + Min_ic);
+        textSize = getTextSize(value, cv::FONT_HERSHEY_PLAIN, 1, 1, 0);
+        cv::putText(image, value, cv::Point(60, printable_height - i + textSize.height), cv::FONT_HERSHEY_PLAIN, 1, ic_color, 1);
     }
 
 
@@ -118,7 +123,7 @@ cv::Mat Graph::print_img(){
 }
 
 
-Graph::Graph(){
+Graph::Graph(functionData_t fdata, int widht, int height){
     // blue        = cv::Vec3b( 57, 106, 177);
     // orange      = cv::Vec3b(218, 124,  48);
     // green       = cv::Vec3b( 62, 150,  81);
