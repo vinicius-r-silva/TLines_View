@@ -12,6 +12,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
+find_package(OpenCV REQUIRED)
 
 add_executable(TLine_Viewer
   main.cpp
@@ -19,6 +20,10 @@ add_executable(TLine_Viewer
   tview.h
   tview.ui
   icons.qrc
+  graph.cpp
+  graph.h
+  function.h
+  function.cpp
 )
 
-target_link_libraries(TLine_Viewer PRIVATE Qt5::Widgets)
+target_link_libraries(TLine_Viewer PRIVATE Qt5::Widgets ${OpenCV_LIBS})
