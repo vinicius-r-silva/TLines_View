@@ -26,6 +26,11 @@ private slots:
     void on_secondR_clicked();
     void on_thirdR_clicked();
 
+    void on_dT_textChanged(const QString &arg1);
+    void on_nT_textChanged(const QString &arg1);
+    void on_dZ_textChanged(const QString &arg1);
+    void on_nZ_textChanged(const QString &arg1);
+
 private:
     Ui::TView *ui;
     QLineEdit *zLine;
