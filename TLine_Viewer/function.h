@@ -39,4 +39,4 @@ typedef struct functionData_t{
 }functionData_t;
 
 double initialFunction(double t);
-functionData_t calculateAllValues(int vol, float res, float dt, int nt, float dz, int nz);
+functionData_t calculateAllValues(int vol, int res, float dt, int nt, float dz, int nz);

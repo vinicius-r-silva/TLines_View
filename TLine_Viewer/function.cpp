@@ -1,7 +1,7 @@
 #include "function.h"
 #include <iostream>
 
-functionData_t calculateAllValues(int vol, float res, float dt, int nt, float dz, int nz){
+functionData_t calculateAllValues(int vol, int res, float dt, int nt, float dz, int nz){
     int K = nz/dz;
     int N = nt/dt;
 
