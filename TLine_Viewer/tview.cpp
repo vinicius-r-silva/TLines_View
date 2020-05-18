@@ -42,9 +42,16 @@ TView::TView(QWidget *parent) : QMainWindow(parent),
     ui->thirdR->setIconSize(iconsSize);
 
     ui->firstV->setChecked(true);
+    vol = CONTINUA;
     ui->secondR->setChecked(true);
+    res = ZERO;
+
+    datas = allocMemory(vol, res, dt, nt, dz, nz);
+    graphs = new Graph(datas, ui->zGraphic->width(), ui->zGraphic->height());
 
     this->setWindowTitle("Transmission Lines");
+
+
 }
 
 TView::~TView() {
@@ -96,30 +103,35 @@ void TView::on_tLine_textChanged(const QString &arg1){
 void TView::on_firstV_clicked(){
     if(ui->firstV->isChecked() && vol != CONTINUA){
         vol = CONTINUA;
+        datas = calculateAllValues(datas, vol, res, dt, nt, dz, nz);
     }
 }
 
 void TView::on_secondV_clicked(){
     if(ui->secondV->isChecked() && vol != DEGRAU){
         vol = DEGRAU;
+        datas = calculateAllValues(datas, vol, res, dt, nt, dz, nz);
     }
 }
 
 void TView::on_firstR_clicked(){
     if(ui->firstR->isChecked() && res != INFINITA){
        res = INFINITA;
+       datas = calculateAllValues(datas, vol, res, dt, nt, dz, nz);
     }
 }
 
 void TView::on_secondR_clicked(){
     if(ui->secondR->isChecked() && res != ZERO){
        res = ZERO;
+       datas = calculateAllValues(datas, vol, res, dt, nt, dz, nz);
     }
 }
 
 void TView::on_thirdR_clicked(){
     if(ui->thirdR->isChecked() && res != CEM){
        res = CEM;
+       datas = calculateAllValues(datas, vol, res, dt, nt, dz, nz);
     }
 }
 
@@ -137,7 +149,7 @@ void TView::on_dT_textChanged(const QString &arg1){
 
         if(dT != dt){
             dt = dT;
-
+            datas = calculateAllValues(datas, vol, res, dt, nt, dz, nz);
         }
 
     }catch(std::invalid_argument e){
@@ -161,7 +173,7 @@ void TView::on_nT_textChanged(const QString &arg1){
 
         if(nT != nt){
             nt = nT;
-
+            datas = calculateAllValues(datas, vol, res, dt, nt, dz, nz);
         }
     }catch(std::invalid_argument e){
 
@@ -184,7 +196,7 @@ void TView::on_dZ_textChanged(const QString &arg1){
 
         if(dZ != dz){
             dz = dZ;
-
+            datas = calculateAllValues(datas, vol, res, dt, nt, dz, nz);
         }
     }catch(std::invalid_argument e){
 
@@ -207,7 +219,7 @@ void TView::on_nZ_textChanged(const QString &arg1){
         nZ = std::stof(edit);
         if(nZ != nz){
             nz = nZ;
-
+            datas = calculateAllValues(datas, vol, res, dt, nt, dz, nz);
         }
 
     }catch(std::invalid_argument e){

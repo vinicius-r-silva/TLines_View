@@ -3,13 +3,7 @@
 
 #include <QMainWindow>
 #include <QtWidgets>
-
-#define DEGRAU 0
-#define CONTINUA 1
-
-#define ZERO 0
-#define CEM 1
-#define INFINITA 2
+#include "graph.h"
 
 namespace Ui {
 class TView;
@@ -39,9 +33,11 @@ private slots:
     void on_nZ_textChanged(const QString &arg1);
 
 private:
-    Ui::TView *ui;
+    functionData_t *datas;
     QLineEdit *zLine;
     QLineEdit *tLine;
+    Ui::TView *ui;
+    Graph *graphs;
 
     float zFix;
     float tFix;

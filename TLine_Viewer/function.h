@@ -6,7 +6,7 @@
 
 #define l 100        //meters
 #define MAX_TIME 10    //seconds
-#define c 300000000     //light speed
+#define _c 300000000     //light speed
 
 #define DT 0.001
 #define DZ 0.01
