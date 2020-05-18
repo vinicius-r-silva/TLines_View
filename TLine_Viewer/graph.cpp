@@ -60,7 +60,7 @@ cv::Mat Graph::ZFixed_Graph(double z){
     return print_img(p);
 }
 
-void Graph::updateParameters(functionData_t fdata){
+void Graph::updateParameters(functionData_t *fdata){
     max_vo = 30, min_vo = -30;
     max_ic = 30, min_ic = -30;
 }
@@ -140,7 +140,7 @@ cv::Mat Graph::print_img(PrintParameters p){
 }
 
 
-Graph::Graph(functionData_t fdata, int width, int height, int TMax, int ZMax){
+Graph::Graph(functionData_t *fdata, int width, int height, int TMax, int ZMax){
     this->width = width;
     this->height = height;
 
