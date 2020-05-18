@@ -1,14 +1,18 @@
 #include "function.h"
 #include <iostream>
 
-functionData_t calculateAllValues()
-{
+functionData_t* allocMemory(int vol, int res, float dt, int nt, float dz, int nz){
+
+    int K = nz/dz;
+    int N = nt/dt;
 
     int t;
     int z;
 
     double **voltage;
     double **current;
+
+    functionData_t* functionData = new functionData_t;
 
     voltage = new double *[N + 1];
     current = new double *[N + 1];
@@ -25,6 +29,36 @@ functionData_t calculateAllValues()
             exit(EXIT_FAILURE);
         }
     }
+
+    functionData->voltage = voltage;
+    functionData->current = current;
+
+    return calculateAllValues(functionData, vol, res, dt, nt, dz, nz);
+
+}
+
+
+functionData_t* calculateAllValues(functionData_t* functionData, int vol, int res, float dt, int nt, float dz, int nz){
+    int K = nz/dz;
+    int N = nt/dt;
+
+    double C1 = (-2*dt) / (dt*dz*R + 2*dz*L);
+    double C2 = (2*L - dt*R) / (2*L + dt*R);
+    double C3 = (-2*dt) / (dt*dz*G + 2*dz*C);
+    double C4 = (2*C - dt*G) / (2*C + dt*G);
+
+    int t;
+    int z;
+
+    double **voltage = functionData->voltage;
+    double **current = functionData->current;
+
+    double minVoltage = 0;
+    double maxVoltage = 2;
+
+    double minCurrent = 0;
+    double maxCurrent = 2 / (Z0 + Zl + Rs);
+
 
     std::cout << "iniciando calculo" << std::endl;
 
@@ -45,14 +79,34 @@ functionData_t calculateAllValues()
 
     for (t = 1; t < N; t++)
     {
-        for (z = 1; z < K; z++)
+        for (z = 1; z < K; z++){
             current[t + 1][z] = C1 * (voltage[t][z + 1] - voltage[t][z - 1]) + C2 * current[t - 1][z];
+            
+            if(current[t + 1][z] > maxCurrent)
+                maxCurrent = current[t + 1][z];
+            else if(current[t + 1][z] < minCurrent)
+                minCurrent = current[t + 1][z];
 
-        for (z = 1; z < K; z++)
+        }
+
+        for (z = 1; z < K; z++){
             voltage[t + 1][z + 1] = C3 * (current[t + 1][z + 1] - current[t + 1][z]) + C4 * current[t][z + 1];
+
+            if(voltage[t + 1][z + 1] > maxVoltage)
+                maxVoltage = voltage[t + 1][z + 1];
+            else if(voltage[t + 1][z + 1] < minVoltage)
+                minVoltage = voltage[t + 1][z + 1];
+        }
 
         std::cout << "t: " << t << std::endl;
     }
+
+    functionData->minVoltage = minVoltage;
+    functionData->maxVoltage = maxVoltage;
+
+    functionData->minCurrent = minCurrent;
+    functionData->maxCurrent = maxCurrent;
+
 
     std::cout << "calculo principal terminado" << std::endl;
 
@@ -64,7 +118,23 @@ functionData_t calculateAllValues()
 
     std::cout << "calculo terminado" << std::endl;
 
-    return {voltage, current};
+    return functionData;
+}
+
+double getVoltage(functionData_t* functionData,double t, double z, float dt, float dz){
+
+    int nt = t/dt;
+    int nz = z/dz;
+    
+    return functionData->voltage[nt][nz];
+}
+
+double getCurrent(functionData_t* functionData,double t, double z, float dt, float dz){
+
+    int nt = t/dt;
+    int nz = z/dz;
+
+    return functionData->current[nt][nz];
 }
 
 /*
