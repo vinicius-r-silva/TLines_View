@@ -43,9 +43,9 @@ private:
     cv::Vec3b sycamore;
 
 public:
-    Graph(functionData_t fdata, int width, int height, int TMax, int ZMax);
+    Graph(functionData_t *fdata, int width, int height, int TMax, int ZMax);
     cv::Mat print_img(PrintParameters p);
-    void updateParameters(functionData_t fdata);
+    void updateParameters(functionData_t *fdata);
 
     cv::Mat TFixed_Graph(double t);
     cv::Mat ZFixed_Graph(double z);
