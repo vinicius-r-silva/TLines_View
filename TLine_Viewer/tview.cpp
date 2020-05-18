@@ -56,6 +56,7 @@ TView::TView(QWidget *parent) : QMainWindow(parent),
     updateZGraphic();
 
     this->setWindowTitle("Transmission Lines");
+    changed = false;
 
 }
 
@@ -124,48 +125,63 @@ void TView::on_tLine_textChanged(const QString &arg1){
     }
 }
 
+void TView::on_BtRecalcular_clicked(){
+    if(changed){
+        datas = allocMemory(vol, res, dt, nt, dz, nz);
+        changed = false;
+    }
+    graphs->updateParameters(datas);
+    updateTGraphic();
+    updateZGraphic();
+}
+
 void TView::on_firstV_clicked(){
     if(ui->firstV->isChecked() && vol != CONTINUA){
         vol = CONTINUA;
-        graphs->updateParameters(datas);
-        updateTGraphic();
-        updateZGraphic();
+        changed = true;
+        // graphs->updateParameters(datas);
+        // updateTGraphic();
+        // updateZGraphic();
     }
 }
 
 void TView::on_secondV_clicked(){
     if(ui->secondV->isChecked() && vol != DEGRAU){
         vol = DEGRAU;
-        graphs->updateParameters(datas);
-        updateTGraphic();
-        updateZGraphic();
+        changed = true;
+        // graphs->updateParameters(datas);
+        // updateTGraphic();
+        // updateZGraphic();
     }
 }
 
 void TView::on_firstR_clicked(){
     if(ui->firstR->isChecked() && res != INFINITA){
        res = INFINITA;
-       graphs->updateParameters(datas);
-       updateTGraphic();
-       updateZGraphic();
+        changed = true;
+    //    graphs->updateParameters(datas);
+    //    updateTGraphic();
+    //    updateZGraphic();
     }
 }
 
 void TView::on_secondR_clicked(){
     if(ui->secondR->isChecked() && res != ZERO){
-       res = ZERO;
-       graphs->updateParameters(datas);
-       updateTGraphic();
-       updateZGraphic();
+        res = ZERO;
+        changed = true;
+    //    graphs->updateParameters(datas);
+    //    updateTGraphic();
+    //    updateZGraphic();
     }
 }
 
 void TView::on_thirdR_clicked(){
     if(ui->thirdR->isChecked() && res != CEM){
-       res = CEM;
-       graphs->updateParameters(datas);
-       updateTGraphic();
-       updateZGraphic();
+        res = CEM;
+        changed = true;
+    //    graphs->updateParameters(datas);
+    //    updateTGraphic();
+    //    updateZGraphic();
     }
 }
 
@@ -184,10 +200,11 @@ void TView::on_dT_textChanged(const QString &arg1){
         if(dT != dt && dT != 0 && parametersValid()){
             freeMemory(datas, nt, dt);
             dt = dT;
-            datas = allocMemory(vol, res, dt, nt, dz, nz);
-            graphs->updateParameters(datas);
-            updateTGraphic();
-            updateZGraphic();
+            changed = true;
+            // datas = allocMemory(vol, res, dt, nt, dz, nz);
+            // graphs->updateParameters(datas);
+            // updateTGraphic();
+            // updateZGraphic();
         }
 
     }catch(std::invalid_argument e){
@@ -212,10 +229,11 @@ void TView::on_nT_textChanged(const QString &arg1){
         if(nT != nt && nT != 0 && parametersValid()){
             freeMemory(datas, nt, dt);
             nt = nT;
-            datas = allocMemory(vol, res, dt, nt, dz, nz);
-            graphs->updateParameters(datas);
-            updateTGraphic();
-            updateZGraphic();
+            changed = true;
+            // datas = allocMemory(vol, res, dt, nt, dz, nz);
+            // graphs->updateParameters(datas);
+            // updateTGraphic();
+            // updateZGraphic();
         }
     }catch(std::invalid_argument e){
 
@@ -239,10 +257,11 @@ void TView::on_dZ_textChanged(const QString &arg1){
         if(dZ != dz && dZ != 0 && parametersValid()){
             dz = dZ;
             freeMemory(datas, nt, dt);
-            datas = allocMemory(vol, res, dt, nt, dz, nz);
-            graphs->updateParameters(datas);
-            updateTGraphic();
-            updateZGraphic();
+            changed = true;
+            // datas = allocMemory(vol, res, dt, nt, dz, nz);
+            // graphs->updateParameters(datas);
+            // updateTGraphic();
+            // updateZGraphic();
         }
     }catch(std::invalid_argument e){
 
@@ -266,10 +285,11 @@ void TView::on_nZ_textChanged(const QString &arg1){
         if(nZ != nz && nZ != 0 && parametersValid()){
             nz = nZ;
             freeMemory(datas, nt, dt);
-            datas = allocMemory(vol, res, dt, nt, dz, nz);
-            graphs->updateParameters(datas);
-            updateTGraphic();
-            updateZGraphic();
+            changed = true;
+            // datas = allocMemory(vol, res, dt, nt, dz, nz);
+            // graphs->updateParameters(datas);
+            // updateTGraphic();
+            // updateZGraphic();
         }
 
     }catch(std::invalid_argument e){

@@ -27,6 +27,8 @@ private slots:
     void on_secondR_clicked();
     void on_thirdR_clicked();
 
+    void on_BtRecalcular_clicked();
+
     void on_dT_textChanged(const QString &arg1);
     void on_nT_textChanged(const QString &arg1);
     void on_dZ_textChanged(const QString &arg1);
@@ -52,6 +54,8 @@ private:
     int res;
     int nt;
     int nz;
+
+    bool changed;
 };
 
 #endif // TVIEW_H

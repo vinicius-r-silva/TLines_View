@@ -20,7 +20,7 @@
       <x>0</x>
       <y>0</y>
       <width>211</width>
-      <height>691</height>
+      <height>661</height>
      </rect>
     </property>
     <property name="currentIndex">
@@ -323,6 +323,19 @@
     </property>
     <property name="text">
      <string>t Fixo:</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="BtRecalcular">
+    <property name="geometry">
+     <rect>
+      <x>-2</x>
+      <y>660</y>
+      <width>211</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Recalcular Gráfico</string>
     </property>
    </widget>
   </widget>
