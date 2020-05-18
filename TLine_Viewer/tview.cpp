@@ -24,8 +24,7 @@ TView::TView(QWidget *parent) : QMainWindow(parent),
     dz = 0.01;
     nz = 100;
 
-    datas->current = NULL;
-    datas->voltage = NULL;
+    datas = NULL;
     datas = allocMemory(vol, res, dt, nt, dz, nz);
     graphs = new Graph(datas, ui->zGraphic->width(), ui->zGraphic->height(), nt, nz);
 
@@ -119,7 +118,8 @@ void TView::on_tLine_textChanged(const QString &arg1){
 void TView::on_firstV_clicked(){
     if(ui->firstV->isChecked() && vol != CONTINUA){
         vol = CONTINUA;
-        datas = allocMemory(datas, vol, res, dt, nt, dz, nz);
+        freeMemory(datas, nt, dt);
+        datas = allocMemory(vol, res, dt, nt, dz, nz);
         graphs->updateParameters(datas);
         updateTGraphic();
         updateZGraphic();
@@ -129,7 +129,8 @@ void TView::on_firstV_clicked(){
 void TView::on_secondV_clicked(){
     if(ui->secondV->isChecked() && vol != DEGRAU){
         vol = DEGRAU;
-        datas = allocMemory(datas, vol, res, dt, nt, dz, nz);
+        freeMemory(datas, nt, dt);
+        datas = allocMemory(vol, res, dt, nt, dz, nz);
         graphs->updateParameters(datas);
         updateTGraphic();
         updateZGraphic();
@@ -139,7 +140,8 @@ void TView::on_secondV_clicked(){
 void TView::on_firstR_clicked(){
     if(ui->firstR->isChecked() && res != INFINITA){
        res = INFINITA;
-       datas = allocMemory(datas, vol, res, dt, nt, dz, nz);
+       freeMemory(datas, nt, dt);
+       datas = allocMemory(vol, res, dt, nt, dz, nz);
        graphs->updateParameters(datas);
        updateTGraphic();
        updateZGraphic();
@@ -149,7 +151,8 @@ void TView::on_firstR_clicked(){
 void TView::on_secondR_clicked(){
     if(ui->secondR->isChecked() && res != ZERO){
        res = ZERO;
-       datas = allocMemory(datas, vol, res, dt, nt, dz, nz);
+       freeMemory(datas, nt, dt);
+       datas = allocMemory(vol, res, dt, nt, dz, nz);
        graphs->updateParameters(datas);
        updateTGraphic();
        updateZGraphic();
@@ -159,7 +162,8 @@ void TView::on_secondR_clicked(){
 void TView::on_thirdR_clicked(){
     if(ui->thirdR->isChecked() && res != CEM){
        res = CEM;
-       datas = allocMemory(datas, vol, res, dt, nt, dz, nz);
+       freeMemory(datas, nt, dt);
+       datas = allocMemory(vol, res, dt, nt, dz, nz);
        graphs->updateParameters(datas);
        updateTGraphic();
        updateZGraphic();
@@ -180,7 +184,8 @@ void TView::on_dT_textChanged(const QString &arg1){
 
         if(dT != dt){
             dt = dT;
-            datas = allocMemory(datas, vol, res, dt, nt, dz, nz);
+            freeMemory(datas, nt, dt);
+            datas = allocMemory(vol, res, dt, nt, dz, nz);
             graphs->updateParameters(datas);
             updateTGraphic();
             updateZGraphic();
@@ -207,7 +212,8 @@ void TView::on_nT_textChanged(const QString &arg1){
 
         if(nT != nt){
             nt = nT;
-            datas = allocMemory(datas, vol, res, dt, nt, dz, nz);
+            freeMemory(datas, nt, dt);
+            datas = allocMemory(vol, res, dt, nt, dz, nz);
             graphs->updateParameters(datas);
             updateTGraphic();
             updateZGraphic();
@@ -233,7 +239,8 @@ void TView::on_dZ_textChanged(const QString &arg1){
 
         if(dZ != dz){
             dz = dZ;
-            datas = allocMemory(datas, vol, res, dt, nt, dz, nz);
+            freeMemory(datas, nt, dt);
+            datas = allocMemory(vol, res, dt, nt, dz, nz);
             graphs->updateParameters(datas);
             updateTGraphic();
             updateZGraphic();
@@ -259,7 +266,8 @@ void TView::on_nZ_textChanged(const QString &arg1){
         nZ = std::stof(edit);
         if(nZ != nz){
             nz = nZ;
-            datas = allocMemory(datas, vol, res, dt, nt, dz, nz);
+            freeMemory(datas, nt, dt);
+            datas = allocMemory(vol, res, dt, nt, dz, nz);
             graphs->updateParameters(datas);
             updateTGraphic();
             updateZGraphic();

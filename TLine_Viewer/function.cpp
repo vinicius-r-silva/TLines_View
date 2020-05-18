@@ -1,6 +1,27 @@
 #include "function.h"
 #include <iostream>
 
+void freeMemory(functionData_t* functionData, float nt, float dt){
+    int t;
+
+    int N = nt/dt;
+
+    double **voltage = functionData->voltage;
+    double **current = functionData->current;
+
+    for (t = 0; t < N + 1; t++)
+    {
+        delete[] voltage[t];
+        delete[] current[t];
+    }
+
+    delete[] voltage;
+    delete[] current;
+
+    delete functionData;
+}
+
+
 functionData_t* allocMemory(int vol, int res, float dt, int nt, float dz, int nz){
 
     int K = nz/dz;
