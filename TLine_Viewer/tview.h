@@ -35,6 +35,8 @@ private slots:
     void updateZGraphic();
     void updateTGraphic();
 
+    bool parametersValid();
+
 private:
     functionData_t *datas;
     QLineEdit *zLine;

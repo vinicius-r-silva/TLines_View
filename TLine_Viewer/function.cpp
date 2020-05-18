@@ -19,6 +19,8 @@ void freeMemory(functionData_t* functionData, float nt, float dt){
     delete[] current;
 
     delete functionData;
+
+    std::cout << "ALL CLEAR\n";
 }
 
 
