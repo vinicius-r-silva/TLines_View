@@ -42,10 +42,10 @@ functionData_t* calculateAllValues(functionData_t* functionData, int vol, int re
     int K = nz/dz;
     int N = nt/dt;
 
-    double C1 = (-2*dt) / (dt*dz*R + 2*dz*L);
-    double C2 = (2*L - dt*R) / (2*L + dt*R);
-    double C3 = (-2*dt) / (dt*dz*G + 2*dz*C);
-    double C4 = (2*C - dt*G) / (2*C + dt*G);
+    double C1 = (-2*dt) / (dt*dz*_R + 2*dz*L);
+    double C2 = (2*L - dt*_R) / (2*L + dt*_R);
+    double C3 = (-2*dt) / (dt*dz*_G + 2*dz*C);
+    double C4 = (2*C - dt*_G) / (2*C + dt*_G);
 
     int t;
     int z;

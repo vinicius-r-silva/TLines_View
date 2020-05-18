@@ -4,16 +4,16 @@
 //v(t) = u(t) - u(t-l*/(10*uf)
 //uf -> 0.9c
 
-#define l 100        //meters
+//#define l 100        //meters
 #define MAX_TIME 10    //seconds
-#define _c 300000000     //light speed
+//#define _c 300000000     //light speed
 
 #define DT 0.001
 #define DZ 0.01
 
 //sem perdas
-#define R 0 //resistance
-#define G 0 //conductance
+#define _R 0 //resistance
+#define _G 0 //conductance
 
 #define Z0 50
 #define Rs 75

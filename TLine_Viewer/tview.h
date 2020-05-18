@@ -32,6 +32,9 @@ private slots:
     void on_dZ_textChanged(const QString &arg1);
     void on_nZ_textChanged(const QString &arg1);
 
+    void updateZGraphic();
+    void updateTGraphic();
+
 private:
     functionData_t *datas;
     QLineEdit *zLine;

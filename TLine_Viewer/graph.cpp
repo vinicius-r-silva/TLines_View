@@ -140,30 +140,30 @@ cv::Mat Graph::print_img(PrintParameters p){
 }
 
 
-Graph::Graph(functionData_t fdata, int width, int height, double TMax, double ZMax){
+Graph::Graph(functionData_t fdata, int width, int height, int TMax, int ZMax){
     this->width = width;
     this->height = height;
 
     updateParameters(fdata);
 
-    // blue        = cv::Vec3b( 57, 106, 177);
-    // orange      = cv::Vec3b(218, 124,  48);
-    // green       = cv::Vec3b( 62, 150,  81);
-    // red         = cv::Vec3b(204,  37,  41);
-    // dark_grey   = cv::Vec3b( 83,  81,  84);
-    // purple      = cv::Vec3b(107,  76, 154);
-    // dark_red    = cv::Vec3b(146,  36,  40);
-    // sycamore    = cv::Vec3b(148, 139,  61);
+     blue        = cv::Vec3b( 57, 106, 177);
+     orange      = cv::Vec3b(218, 124,  48);
+     green       = cv::Vec3b( 62, 150,  81);
+     red         = cv::Vec3b(204,  37,  41);
+     dark_grey   = cv::Vec3b( 83,  81,  84);
+     purple      = cv::Vec3b(107,  76, 154);
+     dark_red    = cv::Vec3b(146,  36,  40);
+     sycamore    = cv::Vec3b(148, 139,  61);
 
     white       = cv::Vec3b(255, 255, 255);
     black       = cv::Vec3b(  0,   0,   0);
 
-    blue        = cv::Vec3b(177, 106,  57);
-    orange      = cv::Vec3b( 48, 124, 218);
-    green       = cv::Vec3b( 81, 150,  62);
-    red         = cv::Vec3b( 41,  37, 204);
-    dark_grey   = cv::Vec3b( 84,  81,  83);
-    purple      = cv::Vec3b(154,  76, 107);
-    dark_red    = cv::Vec3b( 40,  36, 146);
-    sycamore    = cv::Vec3b( 61, 139, 148);
+//    blue        = cv::Vec3b(177, 106,  57);
+//    orange      = cv::Vec3b( 48, 124, 218);
+//    green       = cv::Vec3b( 81, 150,  62);
+//    red         = cv::Vec3b( 41,  37, 204);
+//    dark_grey   = cv::Vec3b( 84,  81,  83);
+//    purple      = cv::Vec3b(154,  76, 107);
+//    dark_red    = cv::Vec3b( 40,  36, 146);
+//    sycamore    = cv::Vec3b( 61, 139, 148);
 }  

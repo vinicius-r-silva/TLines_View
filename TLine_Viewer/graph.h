@@ -43,7 +43,7 @@ private:
     cv::Vec3b sycamore;
 
 public:
-    Graph(functionData_t fdata, int width, int height, double TMax, double ZMax);
+    Graph(functionData_t fdata, int width, int height, int TMax, int ZMax);
     cv::Mat print_img(PrintParameters p);
     void updateParameters(functionData_t fdata);
 
