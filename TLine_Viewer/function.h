@@ -44,7 +44,7 @@ typedef struct functionData_t{
 
 }functionData_t;
 
-void freeMemory(functionData_t* functionData, float nt, float dt);
+void freeMemory(functionData_t* functionData);
 functionData_t* allocMemory(int vol, int res, float dt, int nt, float dz, int nz);
 double initialFunction(double t);
 functionData_t* calculateAllValues(functionData_t* functionData, int vol, int res, float dt, int nt, float dz, int nz);

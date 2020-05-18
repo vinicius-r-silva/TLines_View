@@ -1,15 +1,13 @@
 #include "function.h"
 #include <iostream>
 
-void freeMemory(functionData_t* functionData, float nt, float dt){
+void freeMemory(functionData_t* functionData){
     int t;
-
-    int N = nt/dt;
 
     double **voltage = functionData->voltage;
     double **current = functionData->current;
 
-    for (t = 0; t < N + 1; t++)
+    for (t = 0; voltage[t] != nullptr; t++)
     {
         delete[] voltage[t];
         delete[] current[t];
@@ -37,8 +35,8 @@ functionData_t* allocMemory(int vol, int res, float dt, int nt, float dz, int nz
 
     functionData_t* functionData = new functionData_t;
 
-    voltage = new double *[N + 1];
-    current = new double *[N + 1];
+    voltage = new double *[N + 2];
+    current = new double *[N + 2];
 
     std::cout << "iniciando alocacao" << std::endl;
     for (t = 0; t < N + 1; t++)
@@ -52,6 +50,9 @@ functionData_t* allocMemory(int vol, int res, float dt, int nt, float dz, int nz
             exit(EXIT_FAILURE);
         }
     }
+
+    voltage[N + 1] = nullptr;
+    current[N + 1] = nullptr;
 
     functionData->voltage = voltage;
     functionData->current = current;
@@ -159,12 +160,3 @@ double getCurrent(functionData_t* functionData,double t, double z, float dt, flo
 
     return functionData->current[nt][nz];
 }
-
-/*
-int main(){
-
-    calculateAllValues();
-
-    return 0;
-}
-*/

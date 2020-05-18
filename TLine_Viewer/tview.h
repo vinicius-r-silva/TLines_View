@@ -46,14 +46,19 @@ private:
     Ui::TView *ui;
     Graph *graphs;
 
+    float dtPrev;
+    float dzPrev;
     float zFix;
     float tFix;
     float dt;
     float dz;
+    int ntPrev;
+    int nzPrev;
     int vol;
     int res;
     int nt;
     int nz;
+
 
     bool changed;
 };
