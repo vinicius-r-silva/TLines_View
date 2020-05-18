@@ -92,7 +92,7 @@ cv::Mat Graph::print_img(PrintParameters p){
 
     for(i = 0; i < printable_width * QTD_PER_PX; i ++){
         vo = (this->*(p.voltage))(dx * i) * vo2px;
-        vo = (this->*(p.voltage))(dx * i) * vo2px;
+        ic = (this->*(p.current))(dx * i) * ic2px;
 
         vo = (printable_height / 2) - vo;
         ic = (printable_height / 2) - ic;
@@ -140,7 +140,7 @@ cv::Mat Graph::print_img(PrintParameters p){
 }
 
 
-Graph::Graph(functionData_t fdata, int width, int height){
+Graph::Graph(functionData_t fdata, int width, int height, double TMax, double ZMax){
     this->width = width;
     this->height = height;
 
