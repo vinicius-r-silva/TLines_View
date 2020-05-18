@@ -4,6 +4,13 @@
 #include <QMainWindow>
 #include <QtWidgets>
 
+#define DEGRAU 0
+#define CONTINUA 1
+
+#define ZERO 0
+#define CEM 1
+#define INFINITA 2
+
 namespace Ui {
 class TView;
 }
@@ -35,6 +42,15 @@ private:
     Ui::TView *ui;
     QLineEdit *zLine;
     QLineEdit *tLine;
+
+    float zFix;
+    float tFix;
+    float dt;
+    float dz;
+    int vol;
+    int res;
+    int nt;
+    int nz;
 };
 
 #endif // TVIEW_H

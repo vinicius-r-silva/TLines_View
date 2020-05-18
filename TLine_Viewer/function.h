@@ -21,6 +21,13 @@
 #define Zl 0
 //#define Zl 100
 
+#define DEGRAU 0
+#define CONTINUA 1
+
+#define ZERO 0
+#define CEM 1
+#define INFINITA 2
+
 const double C = 7.40741 * powf64x(10, -11);
 const double L = 1.85185 * powf64x(10, -7);
 
@@ -32,4 +39,4 @@ typedef struct functionData_t{
 }functionData_t;
 
 double initialFunction(double t);
-functionData_t calculateAllValues(float vol, float res, float dt, int nt, float dz, int nz);
+functionData_t calculateAllValues(int vol, float res, float dt, int nt, float dz, int nz);
