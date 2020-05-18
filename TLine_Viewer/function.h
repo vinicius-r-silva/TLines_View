@@ -36,7 +36,18 @@ typedef struct functionData_t{
     double **voltage;
     double **current;
 
+    double minCurrent;
+    double maxCurrent;
+
+    double minVoltage;
+    double maxVoltage;
+
 }functionData_t;
 
+
+functionData_t* allocMemory(int vol, int res, float dt, int nt, float dz, int nz);
 double initialFunction(double t);
-functionData_t calculateAllValues(int vol, int res, float dt, int nt, float dz, int nz);
+functionData_t* calculateAllValues(functionData_t* functionData, int vol, int res, float dt, int nt, float dz, int nz);
+
+double getCurrent(functionData_t* functionData, double t, double z, float dt, float dz);
+double getVoltage(functionData_t* functionData, double t, double z, float dt, float dz);
