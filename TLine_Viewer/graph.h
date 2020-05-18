@@ -5,11 +5,31 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 
+#include "function.h"
+
 class Graph{
 
 private:
-    float voltage(float x);
-    float current(float x);
+    double TFixed_vo(double z);
+    double TFixed_ic(double z);
+    double ZFixed_vo(double t);
+    double ZFixed_ic(double t);
+
+    int width;
+    int height;
+
+    double fixedT;
+    double fixedZ;
+
+    double max_vo, min_vo;
+    double max_ic, min_ic;
+
+    struct PrintParameters{
+        double (Graph::*voltage)(double);
+        double (Graph::*current)(double);
+
+        double max_x;
+    };
 
     cv::Vec3b white;
     cv::Vec3b black;
@@ -23,8 +43,12 @@ private:
     cv::Vec3b sycamore;
 
 public:
-    Graph(functionData_t fdata, int widht, int height);
-    cv::Mat print_img();
+    Graph(functionData_t fdata, int width, int height);
+    cv::Mat print_img(PrintParameters p);
+    void updateParameters(functionData_t fdata);
+
+    cv::Mat TFixed_Graph(double t);
+    cv::Mat ZFixed_Graph(double z);
 
 };
 
