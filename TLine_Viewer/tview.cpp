@@ -278,3 +278,5 @@ void TView::on_nZ_textChanged(const QString &arg1){
 
     }
 }
+
+
