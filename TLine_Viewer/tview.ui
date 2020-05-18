@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>965</width>
-    <height>494</height>
+    <width>1352</width>
+    <height>720</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,16 +19,16 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>341</width>
-      <height>471</height>
+      <width>211</width>
+      <height>701</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="inPar">
      <attribute name="title">
-      <string>Initial Parameters</string>
+      <string>Parameters</string>
      </attribute>
      <widget class="QGroupBox" name="Voltages">
       <property name="geometry">
@@ -142,7 +142,7 @@
     </widget>
     <widget class="QWidget" name="advConf">
      <attribute name="title">
-      <string>Advanced Configuration</string>
+      <string>Advanced</string>
      </attribute>
      <widget class="QLabel" name="n_t">
       <property name="geometry">
@@ -241,10 +241,10 @@
    <widget class="QLabel" name="zGraphic">
     <property name="geometry">
      <rect>
-      <x>550</x>
+      <x>380</x>
       <y>30</y>
-      <width>401</width>
-      <height>186</height>
+      <width>961</width>
+      <height>311</height>
      </rect>
     </property>
     <property name="mouseTracking">
@@ -266,7 +266,7 @@
    <widget class="QLineEdit" name="zLine">
     <property name="geometry">
      <rect>
-      <x>442</x>
+      <x>272</x>
       <y>30</y>
       <width>101</width>
       <height>25</height>
@@ -276,7 +276,7 @@
    <widget class="QLabel" name="z_Fixo">
     <property name="geometry">
      <rect>
-      <x>380</x>
+      <x>220</x>
       <y>30</y>
       <width>51</width>
       <height>21</height>
@@ -289,10 +289,10 @@
    <widget class="QLabel" name="tGraphic">
     <property name="geometry">
      <rect>
-      <x>550</x>
-      <y>270</y>
-      <width>401</width>
-      <height>186</height>
+      <x>380</x>
+      <y>370</y>
+      <width>961</width>
+      <height>311</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -305,8 +305,8 @@
    <widget class="QLineEdit" name="tLine">
     <property name="geometry">
      <rect>
-      <x>442</x>
-      <y>270</y>
+      <x>272</x>
+      <y>370</y>
       <width>101</width>
       <height>25</height>
      </rect>
@@ -315,8 +315,8 @@
    <widget class="QLabel" name="t_Fixo">
     <property name="geometry">
      <rect>
-      <x>380</x>
-      <y>270</y>
+      <x>220</x>
+      <y>370</y>
       <width>51</width>
       <height>21</height>
      </rect>

@@ -98,7 +98,7 @@ functionData_t* calculateAllValues(functionData_t* functionData, int vol, int re
                 minVoltage = voltage[t + 1][z + 1];
         }
 
-        std::cout << "t: " << t << std::endl;
+        //std::cout << "t: " << t << std::endl;
     }
 
     functionData->minVoltage = minVoltage;
