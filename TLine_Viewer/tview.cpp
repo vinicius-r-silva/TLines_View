@@ -19,12 +19,15 @@ TView::TView(QWidget *parent) : QMainWindow(parent),
 
     vol = CONTINUA;
     res = ZERO;
-    zFix = 0;
-    tFix = 0;
-    dt = 0.000000037;
-    nt = 0.0000003;
-    dz = 0.01;
-    nz = 100;
+
+    ui->zLine->setText(QString::number(0));
+    ui->tLine->setText(QString::number(0));
+
+    ui->dT->setText(QString::number(0.000000037));
+    ui->nT->setText(QString::number(0.0000003));
+    ui->dZ->setText(QString::number(0.01));
+    ui->nZ->setText(QString::number(100));
+
     dtPrev = dt;
     ntPrev = nt;
     dzPrev = dz;
@@ -33,14 +36,6 @@ TView::TView(QWidget *parent) : QMainWindow(parent),
     datas = NULL;
     datas = allocMemory(vol, res, dt, nt, dz, nz);
     graphs = new Graph(datas, ui->zGraphic->width(), ui->zGraphic->height(), nt, nz, dt, dz);
-
-    ui->zLine->setText(QString::number(zFix));
-    ui->tLine->setText(QString::number(tFix));
-
-    ui->dT->setText(QString::number(dt));
-    ui->nT->setText(QString::number(nt));
-    ui->dZ->setText(QString::number(dz));
-    ui->nZ->setText(QString::number(nz));
 
     ui->firstV->setIcon(QIcon(":/icons/firstV.png"));
     ui->secondV->setIcon(QIcon(":/icons/secondV.png"));
@@ -148,14 +143,10 @@ void TView::on_BtRecalcular_clicked(){
             QMessageBox::information(this, tr("CONFIRMATION"), tr("Tudo enviado e atualizado"));
         }else{
             QMessageBox::warning(this, tr("ERROR BOX"), tr("Parametros ultrapassam o limite da memória"));
-            dt = dtPrev;
-            nt = ntPrev;
-            dz = dzPrev;
-            nz = nzPrev;
-            ui->dT->setText(QString::number(dt));
-            ui->nT->setText(QString::number(nt));
-            ui->dZ->setText(QString::number(dz));
-            ui->nZ->setText(QString::number(nz));
+            ui->dT->setText(QString::number(dtPrev));
+            ui->nT->setText(QString::number(ntPrev));
+            ui->dZ->setText(QString::number(dzPrev));
+            ui->nZ->setText(QString::number(nzPrev));
             changed = false;
         }
     }
