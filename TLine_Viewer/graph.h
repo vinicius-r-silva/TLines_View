@@ -10,6 +10,8 @@
 class Graph{
 
 private:
+    // int debug_count;
+
     double TFixed_vo(double z);
     double TFixed_ic(double z);
     double ZFixed_vo(double t);
@@ -17,6 +19,13 @@ private:
 
     int width;
     int height;
+
+    int min_t;
+    int min_z;
+    int max_t;
+    int max_z;
+    double dt;
+    double dz;
 
     double fixedT;
     double fixedZ;
@@ -31,6 +40,8 @@ private:
         double max_x;
     };
 
+    functionData_t *fdata;
+
     cv::Vec3b white;
     cv::Vec3b black;
     cv::Vec3b blue;
@@ -43,13 +54,12 @@ private:
     cv::Vec3b sycamore;
 
 public:
-    Graph(functionData_t *fdata, int width, int height, int TMax, int ZMax);
+    Graph(functionData_t *fdata, int width, int height, int TMax, int ZMax, double dt, double dz);
     cv::Mat print_img(PrintParameters p);
-    void updateParameters(functionData_t *fdata);
+    void updateParameters(functionData_t *fdata, int nt, int nz, double dt, double dz);
 
     cv::Mat TFixed_Graph(double t);
     cv::Mat ZFixed_Graph(double z);
-
 };
 
 

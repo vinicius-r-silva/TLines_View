@@ -32,7 +32,7 @@ TView::TView(QWidget *parent) : QMainWindow(parent),
 
     datas = NULL;
     datas = allocMemory(vol, res, dt, nt, dz, nz);
-    graphs = new Graph(datas, ui->zGraphic->width(), ui->zGraphic->height(), nt, nz);
+    graphs = new Graph(datas, ui->zGraphic->width(), ui->zGraphic->height(), nt, nz, dt, dz);
 
     ui->zLine->setText("0");
     ui->tLine->setText("0");
@@ -138,7 +138,7 @@ void TView::on_BtRecalcular_clicked(){
             changed = false;
             freeMemory(datas);
             datas = allocMemory(vol, res, dt, nt, dz, nz);
-            graphs->updateParameters(datas);
+            graphs->updateParameters(datas, nt, nz, dt, dz);
             updateTGraphic();
             updateZGraphic();
             dtPrev = dt;

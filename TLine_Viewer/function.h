@@ -1,5 +1,6 @@
 #pragma once
 #include <cmath>
+#include <bits/stdc++.h> 
 //v(t) = 2u(t)
 //v(t) = u(t) - u(t-l*/(10*uf)
 //uf -> 0.9c

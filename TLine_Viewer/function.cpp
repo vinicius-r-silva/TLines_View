@@ -104,21 +104,23 @@ functionData_t* calculateAllValues(functionData_t* functionData, int vol, int re
     for (t = 1; t < N; t++)
     {
         for (z = 1; z < K; z++){
+            double cur = C1 * (voltage[t][z + 1] - voltage[t][z - 1]) + C2 * current[t - 1][z];
             current[t + 1][z] = C1 * (voltage[t][z + 1] - voltage[t][z - 1]) + C2 * current[t - 1][z];
             
-            if(current[t + 1][z] > maxCurrent)
+            if(!std::isinf(current[t + 1][z]) && current[t + 1][z] > maxCurrent)
                 maxCurrent = current[t + 1][z];
-            else if(current[t + 1][z] < minCurrent)
+            else if(!std::isinf(current[t + 1][z]) && current[t + 1][z] < minCurrent)
                 minCurrent = current[t + 1][z];
 
         }
 
         for (z = 1; z < K; z++){
+            double cur = C3 * (current[t + 1][z + 1] - current[t + 1][z]) + C4 * current[t][z + 1];
             voltage[t + 1][z + 1] = C3 * (current[t + 1][z + 1] - current[t + 1][z]) + C4 * current[t][z + 1];
 
-            if(voltage[t + 1][z + 1] > maxVoltage)
+            if(!std::isinf(voltage[t + 1][z + 1]) && voltage[t + 1][z + 1] > maxVoltage)
                 maxVoltage = voltage[t + 1][z + 1];
-            else if(voltage[t + 1][z + 1] < minVoltage)
+            else if(!std::isinf(voltage[t + 1][z + 1]) && voltage[t + 1][z + 1] < minVoltage)
                 minVoltage = voltage[t + 1][z + 1];
         }
 
@@ -150,6 +152,7 @@ double getVoltage(functionData_t* functionData,double t, double z, float dt, flo
     int nt = t/dt;
     int nz = z/dz;
     
+    std::cout << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << functionData->voltage[nt][nz] << std::endl;
     return functionData->voltage[nt][nz];
 }
 
@@ -158,5 +161,6 @@ double getCurrent(functionData_t* functionData,double t, double z, float dt, flo
     int nt = t/dt;
     int nz = z/dz;
 
+    std::cout << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << functionData->current[nt][nz] << std::endl;
     return functionData->current[nt][nz];
 }

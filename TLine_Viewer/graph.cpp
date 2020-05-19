@@ -12,8 +12,8 @@
 #include "function.h"
 #include "graph.h"
 
-#define _Z0 0
-#define _ZF 100
+// #define _Z0 0
+// #define _ZF 100
 
 #define _X_LABEL_SIZE 30
 #define _Y_LABEL_SIZE 120
@@ -22,29 +22,48 @@
 
 #define QTD_PER_PX 10
 
+#define SCALE 3
+
 double Graph::TFixed_vo(double z){
-    return (fixedT - 2)*cos(0.39*z) + (fixedT + 5)*sin(0.5*z) + (fixedT - 0.5)*cos(0.1*z) + (fixedT + 10)*sin(0.7*z) + (fixedT - 5)*sin(1*z) + (fixedT + 5)*sin(0.35*z);
+    // if(z >= max_z || z < 0)
+    //      return 0.0;
+
+    return getVoltage(fdata, fixedT, z, dt, dz);
+    // return (fixedT - 2)*cos(0.39*z) + (fixedT + 5)*sin(0.5*z) + (fixedT - 0.5)*cos(0.1*z) + (fixedT + 10)*sin(0.7*z) + (fixedT - 5)*sin(1*z) + (fixedT + 5)*sin(0.35*z);
 }
 
 double Graph::TFixed_ic(double z){
-    return (fixedT - 2)*sin(0.19*z) + (fixedT + 5)*sin(0.25*z) + (fixedT - 0.5)*cos(1*z) + (fixedT + 10)*sin(1.4*z) + (fixedT - 5)*cos(1*z) + (fixedT + 5)*cos(0.35*z);
+    // if(z >= max_z || z < 0)
+    //      return 0.0;
+
+    return getCurrent(fdata, fixedT, z, dt, dz);
+    // return (fixedT - 2)*sin(0.19*z) + (fixedT + 5)*sin(0.25*z) + (fixedT - 0.5)*cos(1*z) + (fixedT + 10)*sin(1.4*z) + (fixedT - 5)*cos(1*z) + (fixedT + 5)*cos(0.35*z);
 }
 
 double Graph::ZFixed_vo(double t){
-    return (fixedZ - 2)*cos(0.39*t) + (fixedZ + 5)*sin(0.5*t) + (fixedZ - 0.5)*cos(0.1*t) + (fixedZ + 10)*sin(0.7*t) + (fixedZ - 5)*sin(1*t) + (fixedZ + 5)*sin(0.35*t);
+    // if(t >= max_t || t < 0)
+    //      return 0.0;
+         
+    return getVoltage(fdata, t, fixedZ, dt, dz);
+    // return (fixedZ - 2)*cos(1.39*t) + (fixedZ + 5)*sin(1.5*t) + (fixedZ - 0.5)*cos(0.52*t) + (fixedZ + 10)*sin(0.74*t) + (fixedZ - 5)*sin(0.99*t) + (fixedZ + 5)*sin(0.82*t);
 }
 
 double Graph::ZFixed_ic(double t){
-    return (fixedZ - 2)*sin(0.19*t) + (fixedZ + 5)*sin(0.25*t) + (fixedZ - 0.5)*cos(1*t) + (fixedZ + 10)*sin(1.4*t) + (fixedZ - 5)*cos(1*t) + (fixedZ + 5)*cos(0.35*t);
+    // if(t >= max_t || t < 0)
+    //      return 0.0;
+         
+    return getCurrent(fdata, t, fixedZ, dt, dz); 
+    // return (fixedZ - 2)*sin(1.09*t) + (fixedZ + 5)*sin(0.39*t) + (fixedZ - 0.5)*cos(0.59*t) + (fixedZ + 10)*sin(1.2*t) + (fixedZ - 5)*cos(1.29*t) + (fixedZ + 5)*cos(1.45*t);
 }
 
 cv::Mat Graph::TFixed_Graph(double t){
     fixedT = t;
 
     PrintParameters p;
-    p.max_x = _ZF;
+    p.max_x = max_z;
     p.voltage = &Graph::TFixed_vo;
     p.current = &Graph::TFixed_ic;
+
 
     return print_img(p);
 }
@@ -53,16 +72,28 @@ cv::Mat Graph::ZFixed_Graph(double z){
     fixedZ = z;
 
     PrintParameters p;
-    p.max_x = _ZF;
+    p.max_x = max_t;
     p.voltage = &Graph::ZFixed_vo;
     p.current = &Graph::ZFixed_ic;
 
     return print_img(p);
 }
 
-void Graph::updateParameters(functionData_t *fdata){
-    max_vo = 30, min_vo = -30;
-    max_ic = 30, min_ic = -30;
+void Graph::updateParameters(functionData_t *fdata, int nt, int nz, double dt, double dz){
+    // max_vo = fdata->maxVoltage, min_vo = -fdata->minVoltage;
+    // max_ic = fdata->maxCurrent, min_ic = -fdata->minCurrent;
+    max_vo = 5, min_vo = -5;
+    max_ic = 5, min_ic = -5;
+    max_t = nt;
+    max_z = nz;
+
+    std::cout << "nt: " << nt << ",  dt: " << dt << ",  nz: " << nz << ",  dz: " << dz << ",  max_vo: " << max_vo << ",  min_vo: " << min_vo << ",  max_ic: " << max_ic << ",  min_ic: " << min_ic << std::endl;
+    std::cout << "maxVoltage: " << fdata->maxVoltage << ",  minVoltage: " << fdata->minVoltage << ",  maxCurrent: " << fdata->maxCurrent << ",  minCurrent: " << fdata->minCurrent << std::endl;
+    std::cout << std::endl;
+
+    this->dt = dt;
+    this->dz = dz;
+    this->fdata = fdata;
 }
 
 cv::Mat Graph::print_img(PrintParameters p){
@@ -70,15 +101,24 @@ cv::Mat Graph::print_img(PrintParameters p){
     int px = 0;
     double vo,ic;
 
-    int printable_width = width - _Y_LABEL_SIZE;
-    int printable_height = height - _X_LABEL_SIZE; 
+    int s_width  = width  * SCALE;
+    int s_height = height * SCALE;
+
+    int s_y_label_size = _Y_LABEL_SIZE * SCALE;
+    int s_x_label_size = _X_LABEL_SIZE * SCALE;
+
+    int s_y_label_dist = _Y_LABEL_DIST * SCALE;
+    int s_x_label_dist = _X_LABEL_DIST * SCALE;
+
+    int printable_width = s_width - s_y_label_size;
+    int printable_height = s_height - s_x_label_size; 
 
     double range_vo = max_vo - min_vo;
     double range_ic = max_ic - min_ic;
 
-    cv::Mat image(height, width, CV_8UC3, white);
-    cv::line(image, cv::Point(0, printable_height), cv::Point(width, printable_height), black);
-    cv::line(image, cv::Point(_Y_LABEL_SIZE, 0), cv::Point(_Y_LABEL_SIZE, height), black);
+    cv::Mat image(s_height, s_width, CV_8UC3, white);
+    cv::line(image, cv::Point(0, printable_height), cv::Point(s_width, printable_height), black, SCALE);
+    cv::line(image, cv::Point(s_y_label_size, 0), cv::Point(s_y_label_size, s_height), black, SCALE);
 
     cv::Vec3b ic_color = green;
     cv::Vec3b vo_color = orange;
@@ -86,74 +126,95 @@ cv::Mat Graph::print_img(PrintParameters p){
     double vo2px = printable_height / range_vo;
     double ic2px = printable_height / range_ic;
 
-    double dx = double(_ZF) / double(printable_width * QTD_PER_PX);
+    double dx = double(p.max_x) / double(printable_width * QTD_PER_PX);
     double dvo = range_vo / printable_height;
     double dic = range_ic / printable_height;
 
-    for(i = 0; i < printable_width * QTD_PER_PX; i ++){
+    double prev_vo, prev_ic;
+    prev_vo = (this->*(p.voltage))(dx) * vo2px;
+    prev_ic = (this->*(p.current))(dx) * ic2px;
+    prev_vo = (printable_height / 2) - prev_vo;
+    prev_ic = (printable_height / 2) - prev_ic;
+
+    for(i = 1; i < printable_width * QTD_PER_PX; i ++){
+        // if(dx * i < 1)
+            // std::cout << "voltage: " << (this->*(p.voltage))(dx * i) << ",  current: " << (this->*(p.current))(dx * i) << std::endl;
+
         vo = (this->*(p.voltage))(dx * i) * vo2px;
         ic = (this->*(p.current))(dx * i) * ic2px;
 
         vo = (printable_height / 2) - vo;
         ic = (printable_height / 2) - ic;
         
-        px = i / QTD_PER_PX + _Y_LABEL_SIZE; 
-        cv::circle(image, cv::Point(px, vo), 1, vo_color);
-        cv::circle(image, cv::Point(px, ic), 1, ic_color);
+        px = i / QTD_PER_PX + s_y_label_size; 
+        cv::line(image, cv::Point(px, prev_vo), cv::Point(px, vo), vo_color, SCALE);
+        cv::line(image, cv::Point(px, prev_ic), cv::Point(px, ic), ic_color, SCALE);
+
+        prev_vo = vo;
+        prev_ic = ic;
     }
 
+    if(SCALE >= 3)
+        cv::GaussianBlur(image, image, cv::Size(3,3), 0);
 
     //Axis values
     char value[20];
     cv::Size textSize;
     memset(value, '\0', 20 * sizeof(char));
 
-    i = _X_LABEL_DIST;
-    for(; i < width - _X_LABEL_DIST; i += _X_LABEL_DIST){
+    i = s_x_label_dist;
+    for(; i < s_width - s_x_label_dist; i += s_x_label_dist){
         sprintf(value, "%.2f", dx * i * QTD_PER_PX);
-        textSize = getTextSize(value, cv::FONT_HERSHEY_PLAIN, 1, 1, 0);
-        cv::putText(image, value, cv::Point(i + _Y_LABEL_SIZE - textSize.width, height - 5), cv::FONT_HERSHEY_PLAIN, 1, black, 1);
+        textSize = getTextSize(value, cv::FONT_HERSHEY_PLAIN, 1 * SCALE, 1 * SCALE, 0);
+        cv::putText(image, value, cv::Point(i + s_y_label_size - textSize.width, s_height - 5), cv::FONT_HERSHEY_PLAIN, 1 * SCALE, black, 1 * SCALE);
     }
     
-    i = _Y_LABEL_DIST;
-    for(; i < height - _Y_LABEL_DIST; i += _Y_LABEL_DIST){
-        sprintf(value, "%6.1f,", dvo * i + min_vo);
-        textSize = getTextSize(value, cv::FONT_HERSHEY_PLAIN, 1, 1, 0);
-        cv::putText(image, value, cv::Point(0, printable_height - i + textSize.height), cv::FONT_HERSHEY_PLAIN, 1, vo_color, 1);
+    i = s_y_label_dist;
+    for(; i < s_height - s_y_label_dist; i += s_y_label_dist){
+        sprintf(value, "%6.1f", dvo * i + min_vo);
+        textSize = getTextSize(value, cv::FONT_HERSHEY_PLAIN, 1 * SCALE, 1 * SCALE, 0);
+        cv::putText(image, value, cv::Point(0, printable_height - i + textSize.height), cv::FONT_HERSHEY_PLAIN, 1 * SCALE, vo_color, 1 * SCALE);
 
         sprintf(value, "%6.1f", dic * i + min_ic);
-        textSize = getTextSize(value, cv::FONT_HERSHEY_PLAIN, 1, 1, 0);
-        cv::putText(image, value, cv::Point(60, printable_height - i + textSize.height), cv::FONT_HERSHEY_PLAIN, 1, ic_color, 1);
+        textSize = getTextSize(value, cv::FONT_HERSHEY_PLAIN, 1 * SCALE, 1 * SCALE, 0);
+        cv::putText(image, value, cv::Point(60 * SCALE, printable_height - i + textSize.height), cv::FONT_HERSHEY_PLAIN, 1 * SCALE, ic_color, 1 * SCALE);
     }
 
 
     //Subtitle
 
-    cv::line(image, cv::Point(width - 90, 25), cv::Point(width - 40, 25), vo_color, 2);
-    cv::line(image, cv::Point(width - 90, 55), cv::Point(width - 40, 55), ic_color, 2);
-    cv::putText(image, "v", cv::Point(width - 25, 30), cv::FONT_HERSHEY_SIMPLEX, 1.0, vo_color, 2);
-    cv::putText(image, "i", cv::Point(width - 20, 60), cv::FONT_HERSHEY_SIMPLEX, 0.8, ic_color, 2);
+    cv::line(image, cv::Point(s_width - 90 * SCALE, 25 * SCALE), cv::Point(s_width - 40 * SCALE, 25 * SCALE), vo_color, 2 * SCALE);
+    cv::line(image, cv::Point(s_width - 90 * SCALE, 55 * SCALE), cv::Point(s_width - 40 * SCALE, 55 * SCALE), ic_color, 2 * SCALE);
+    cv::putText(image, "v", cv::Point(s_width - 25 * SCALE, 30 * SCALE), cv::FONT_HERSHEY_SIMPLEX, 1.0 * SCALE, vo_color, 2 * SCALE);
+    cv::putText(image, "i", cv::Point(s_width - 20 * SCALE, 60 * SCALE), cv::FONT_HERSHEY_SIMPLEX, 0.8 * SCALE, ic_color, 2 * SCALE);
 
-    cv::putText(image, "Z", cv::Point(width - 25, height - 5), cv::FONT_HERSHEY_SIMPLEX, 0.8, black, 2);
+    cv::putText(image, "v", cv::Point(30 * SCALE, 20 * SCALE), cv::FONT_HERSHEY_SIMPLEX, 1.0 * SCALE, vo_color, 2 * SCALE);
+    cv::putText(image, "i", cv::Point(95 * SCALE, 20 * SCALE), cv::FONT_HERSHEY_SIMPLEX, 0.8 * SCALE, ic_color, 2 * SCALE);
+
+    cv::putText(image, "Z", cv::Point(s_width - 25 * SCALE, s_height - 5 * SCALE), cv::FONT_HERSHEY_SIMPLEX, 0.8 * SCALE, black, 2 * SCALE);
     
+    cv::resize(image, image, cv::Size(), 1.0 / double(SCALE), 1.0 / double(SCALE), cv::INTER_CUBIC);
     return image;
 }
 
 
-Graph::Graph(functionData_t *fdata, int width, int height, int TMax, int ZMax){
+Graph::Graph(functionData_t *fdata, int width, int height, int TMax, int ZMax, double dt, double dz){
     this->width = width;
     this->height = height;
 
-    updateParameters(fdata);
+    min_t = 0;
+    min_z = 0;
 
-     blue        = cv::Vec3b( 57, 106, 177);
-     orange      = cv::Vec3b(218, 124,  48);
-     green       = cv::Vec3b( 62, 150,  81);
-     red         = cv::Vec3b(204,  37,  41);
-     dark_grey   = cv::Vec3b( 83,  81,  84);
-     purple      = cv::Vec3b(107,  76, 154);
-     dark_red    = cv::Vec3b(146,  36,  40);
-     sycamore    = cv::Vec3b(148, 139,  61);
+    updateParameters(fdata, TMax, ZMax, dt, dz);
+
+    blue        = cv::Vec3b( 57, 106, 177);
+    orange      = cv::Vec3b(218, 124,  48);
+    green       = cv::Vec3b( 62, 150,  81);
+    red         = cv::Vec3b(204,  37,  41);
+    dark_grey   = cv::Vec3b( 83,  81,  84);
+    purple      = cv::Vec3b(107,  76, 154);
+    dark_red    = cv::Vec3b(146,  36,  40);
+    sycamore    = cv::Vec3b(148, 139,  61);
 
     white       = cv::Vec3b(255, 255, 255);
     black       = cv::Vec3b(  0,   0,   0);
