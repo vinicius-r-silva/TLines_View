@@ -156,6 +156,7 @@ void TView::on_BtRecalcular_clicked(){
             ui->nT->setText(QString::number(nt));
             ui->dZ->setText(QString::number(dz));
             ui->nZ->setText(QString::number(nz));
+            changed = false;
         }
     }
 }
