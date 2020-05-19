@@ -19,8 +19,8 @@ TView::TView(QWidget *parent) : QMainWindow(parent),
 
     vol = CONTINUA;
     res = ZERO;
-    zFix = 0;
-    tFix = 0;
+    zFix = 0;//0.01;
+    tFix = /*4**/0.000000037;
     dt = 0.000000037;
     nt = 0.0000003;
     dz = 0.01;
@@ -59,7 +59,7 @@ TView::TView(QWidget *parent) : QMainWindow(parent),
 
 
     updateTGraphic();
-    //updateZGraphic();
+    updateZGraphic();
 
     this->setWindowTitle("Transmission Lines");
     changed = false;
