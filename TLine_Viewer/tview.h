@@ -41,26 +41,22 @@ private slots:
 
 private:
     functionData_t *datas;
-    QLineEdit *zLine;
-    QLineEdit *tLine;
     Ui::TView *ui;
     Graph *graphs;
 
+    bool changed;
     double dtPrev;
     double dzPrev;
+    double ntPrev;
+    double nzPrev;
     double zFix;
     double tFix;
     double dt;
     double dz;
-    double ntPrev;
-    double nzPrev;
-    int vol;
-    int res;
     double nt;
     double nz;
-
-
-    bool changed;
+    int vol;
+    int res;
 };
 
 #endif // TVIEW_H

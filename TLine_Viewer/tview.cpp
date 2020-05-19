@@ -10,9 +10,6 @@ TView::TView(QWidget *parent) : QMainWindow(parent),
 
     ui->setupUi(this);
 
-    zLine = ui->zLine;
-    tLine = ui->tLine;
-
     this->setStyleSheet("background-color: white;");
 
     QSize iconsSize(46, 46);
@@ -20,8 +17,11 @@ TView::TView(QWidget *parent) : QMainWindow(parent),
     vol = CONTINUA;
     res = ZERO;
 
-    ui->zLine->setText(QString::number(0));
-    ui->tLine->setText(QString::number(0));
+    zFix = 0.0;
+    tFix = 0.0;
+
+    ui->zLine->setText(QString::number(0.0));
+    ui->tLine->setText(QString::number(0.0));
 
     ui->dT->setText(QString::number(0.000000037));
     ui->nT->setText(QString::number(0.0000003));
