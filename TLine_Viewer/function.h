@@ -9,9 +9,6 @@
 #define MAX_TIME 10    //seconds
 //#define _c 300000000     //light speed
 
-#define DT 0.001
-#define DZ 0.01
-
 //sem perdas
 #define _R 0 //resistance
 #define _G 0 //conductance
@@ -46,9 +43,9 @@ typedef struct functionData_t{
 }functionData_t;
 
 void freeMemory(functionData_t* functionData);
-functionData_t* allocMemory(int vol, int res, float dt, int nt, float dz, int nz);
+functionData_t* allocMemory(int vol, int res, double dt, double nt, double dz, double nz);
 double initialFunction(double t);
-functionData_t* calculateAllValues(functionData_t* functionData, int vol, int res, float dt, int nt, float dz, int nz);
+functionData_t* calculateAllValues(functionData_t* functionData, int vol, int res, double dt, double nt, double dz, double nz);
 
-double getCurrent(functionData_t* functionData, double t, double z, float dt, float dz);
-double getVoltage(functionData_t* functionData, double t, double z, float dt, float dz);
+double getCurrent(functionData_t* functionData, double t, double z, double dt, double dz);
+double getVoltage(functionData_t* functionData, double t, double z, double dt, double dz);

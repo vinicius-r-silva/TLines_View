@@ -20,9 +20,9 @@ TView::TView(QWidget *parent) : QMainWindow(parent),
     vol = CONTINUA;
     res = ZERO;
     zFix = 0;
-    tFix = 0;
-    dt = 0.001;
-    nt = 1;
+    tFix = 0.000000037;
+    dt = 0.000000037;
+    nt = 0.0000003;
     dz = 0.01;
     nz = 100;
     dtPrev = dt;
@@ -34,13 +34,13 @@ TView::TView(QWidget *parent) : QMainWindow(parent),
     datas = allocMemory(vol, res, dt, nt, dz, nz);
     graphs = new Graph(datas, ui->zGraphic->width(), ui->zGraphic->height(), nt, nz, dt, dz);
 
-    ui->zLine->setText("0");
-    ui->tLine->setText("0");
+    ui->zLine->setText(QString::number(zFix));
+    ui->tLine->setText(QString::number(tFix));
 
-    ui->dT->setText("0.001");
-    ui->nT->setText("1");
-    ui->dZ->setText("0.01");
-    ui->nZ->setText("100");
+    ui->dT->setText(QString::number(dt));
+    ui->nT->setText(QString::number(nt));
+    ui->dZ->setText(QString::number(dz));
+    ui->nZ->setText(QString::number(nz));
 
     ui->firstV->setIcon(QIcon(":/icons/firstV.png"));
     ui->secondV->setIcon(QIcon(":/icons/secondV.png"));
@@ -59,7 +59,7 @@ TView::TView(QWidget *parent) : QMainWindow(parent),
 
 
     updateTGraphic();
-    updateZGraphic();
+    //updateZGraphic();
 
     this->setWindowTitle("Transmission Lines");
     changed = false;
@@ -98,9 +98,9 @@ void TView::on_zLine_textChanged(const QString &arg1){
         edit.replace(uint32_t(index), 1, ",");
     }
 
-    float fixZ;
+    double fixZ;
     try{
-        fixZ = std::stof(edit);
+        fixZ = std::stod(edit);
 
         if(fixZ != zFix){
             zFix = fixZ;
@@ -119,9 +119,9 @@ void TView::on_tLine_textChanged(const QString &arg1){
         edit.replace(uint32_t(index), 1, ",");
     }
 
-    float fixT;
+    double fixT;
     try{
-        fixT = std::stof(edit);
+        fixT = std::stod(edit);
 
         if(fixT != tFix){
             tFix = fixT;
@@ -204,9 +204,9 @@ void TView::on_dT_textChanged(const QString &arg1){
         edit.replace(uint32_t(index), 1, ",");
     }
 
-    float dT;
+    double dT;
     try{
-        dT = std::stof(edit);
+        dT = std::stod(edit);
 
         if(dT != dt && dT != 0){
             dt = dT;
@@ -228,9 +228,9 @@ void TView::on_nT_textChanged(const QString &arg1){
         edit.replace(uint32_t(index), 1, ",");
     }
 
-    float nT;
+    double nT;
     try{
-        nT = std::stof(edit);
+        nT = std::stod(edit);
 
         if(nT != nt && nT != 0){
             nt = nT;
@@ -251,9 +251,9 @@ void TView::on_dZ_textChanged(const QString &arg1){
         edit.replace(uint32_t(index), 1, ",");
     }
 
-    float dZ;
+    double dZ;
     try{
-        dZ = std::stof(edit);
+        dZ = std::stod(edit);
 
         if(dZ != dz && dZ != 0){
             dz = dZ;
@@ -275,9 +275,9 @@ void TView::on_nZ_textChanged(const QString &arg1){
         edit.replace(uint32_t(index), 1, ",");
     }
 
-    float nZ;
+    double nZ;
     try{
-        nZ = std::stof(edit);
+        nZ = std::stod(edit);
         if(nZ != nz && nZ != 0){
             nz = nZ;
             changed = true;

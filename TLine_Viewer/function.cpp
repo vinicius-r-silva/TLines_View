@@ -22,7 +22,7 @@ void freeMemory(functionData_t* functionData){
 }
 
 
-functionData_t* allocMemory(int vol, int res, float dt, int nt, float dz, int nz){
+functionData_t* allocMemory(int vol, int res, double dt, double nt, double dz, double nz){
 
     int K = nz/dz;
     int N = nt/dt;
@@ -62,14 +62,22 @@ functionData_t* allocMemory(int vol, int res, float dt, int nt, float dz, int nz
 }
 
 
-functionData_t* calculateAllValues(functionData_t* functionData, int vol, int res, float dt, int nt, float dz, int nz){
+functionData_t* calculateAllValues(functionData_t* functionData, int vol, int res, double dt, double nt, double dz, double nz){
     int K = nz/dz;
     int N = nt/dt;
 
-    double C1 = (-2*dt) / (dt*dz*_R + 2*dz*L);
-    double C2 = (2*L - dt*_R) / (2*L + dt*_R);
-    double C3 = (-2*dt) / (dt*dz*_G + 2*dz*C);
-    double C4 = (2*C - dt*_G) / (2*C + dt*_G);
+    const double C1 = (-2.0*dt) / (dt*dz*_R + 2*dz*L);
+    const double C2 = (2.0*L - dt*_R) / (2*L + dt*_R);
+    const double C3 = (-2.0*dt) / (dt*dz*_G + 2*dz*C);
+    const double C4 = (2.0*C - dt*_G) / (2*C + dt*_G);
+
+    std::cout << "C: "<< C << std::endl;
+    std::cout << "L: "<< L << std::endl;
+
+    std::cout << "C1: "<< C1 << std::endl;
+    std::cout << "C2: "<< C2 << std::endl;
+    std::cout << "C3: "<< C3 << std::endl;
+    std::cout << "C4: "<< C4 << std::endl;
 
     int t;
     int z;
@@ -87,6 +95,10 @@ functionData_t* calculateAllValues(functionData_t* functionData, int vol, int re
     std::cout << "iniciando calculo" << std::endl;
 
     //inicial values
+    voltage[0][0] = 2;
+    current[0][0] = 2.0 / (Z0 + Zl + Rs);
+
+    /*
     for (t = 0; t < N + 1; t++)
     {
         voltage[t][0] = 2;
@@ -97,34 +109,40 @@ functionData_t* calculateAllValues(functionData_t* functionData, int vol, int re
     {
         voltage[0][z] = 0;
         current[0][z] = 0;
-    }
 
+        voltage[1][z] = 0;
+        current[1][z] = 0;
+    }
+    */
     std::cout << "parte inicial completa" << std::endl;
 
-    for (t = 1; t < N; t++)
+
+    for (t = 0; t < N; t++)
     {
-        for (z = 1; z < K; z++){
-            double cur = C1 * (voltage[t][z + 1] - voltage[t][z - 1]) + C2 * current[t - 1][z];
-            current[t + 1][z] = C1 * (voltage[t][z + 1] - voltage[t][z - 1]) + C2 * current[t - 1][z];
-            
+        for (z = 0; z < K; z++){
+            // double cur = C1 * (voltage[t][z + 1] - voltage[t][z - 1]) + C2 * current[t - 1][z];
+            current[t + 1][z] = C1 * (voltage[t][z + 1] - voltage[t][z]) + C2 * current[t][z];
+            /* 
             if(!std::isinf(current[t + 1][z]) && current[t + 1][z] > maxCurrent)
                 maxCurrent = current[t + 1][z];
             else if(!std::isinf(current[t + 1][z]) && current[t + 1][z] < minCurrent)
                 minCurrent = current[t + 1][z];
-
+            */
         }
 
-        for (z = 1; z < K; z++){
-            double cur = C3 * (current[t + 1][z + 1] - current[t + 1][z]) + C4 * current[t][z + 1];
-            voltage[t + 1][z + 1] = C3 * (current[t + 1][z + 1] - current[t + 1][z]) + C4 * current[t][z + 1];
+        for (z = 0; z < K; z++){
+            // double cur = C3 * (current[t + 1][z + 1] - current[t + 1][z]) + C4 * current[t][z + 1];
+            voltage[t + 1][z + 1] = C3 * (current[t + 1][z + 1] - current[t + 1][z]) + C4 * voltage[t][z + 1];
 
+            /*
             if(!std::isinf(voltage[t + 1][z + 1]) && voltage[t + 1][z + 1] > maxVoltage)
                 maxVoltage = voltage[t + 1][z + 1];
             else if(!std::isinf(voltage[t + 1][z + 1]) && voltage[t + 1][z + 1] < minVoltage)
                 minVoltage = voltage[t + 1][z + 1];
+            */
         }
 
-        //std::cout << "t: " << t << std::endl;
+        // std::cout << "t: " << t << std::endl;
     }
 
     functionData->minVoltage = minVoltage;
@@ -139,7 +157,7 @@ functionData_t* calculateAllValues(functionData_t* functionData, int vol, int re
     //curto circuito
     for (t = 0; t < N; t++)
     {
-        voltage[t + 1][K] = 0;
+        voltage[t][K] = 0;
     }
 
     std::cout << "calculo terminado" << std::endl;
@@ -147,20 +165,24 @@ functionData_t* calculateAllValues(functionData_t* functionData, int vol, int re
     return functionData;
 }
 
-double getVoltage(functionData_t* functionData,double t, double z, float dt, float dz){
+double getVoltage(functionData_t* functionData,double t, double z, double dt, double dz){
 
     int nt = t/dt;
     int nz = z/dz;
     
-    std::cout << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << functionData->voltage[nt][nz] << std::endl;
+    if(nz < 100)
+        std::cout << "v " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << functionData->voltage[nt][nz] << std::endl;
+    
     return functionData->voltage[nt][nz];
 }
 
-double getCurrent(functionData_t* functionData,double t, double z, float dt, float dz){
+double getCurrent(functionData_t* functionData,double t, double z, double dt, double dz){
 
     int nt = t/dt;
     int nz = z/dz;
-
-    std::cout << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << functionData->current[nt][nz] << std::endl;
+    
+    if(nz < 100)
+        std::cout << "c " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << functionData->current[nt][nz] << std::endl;
+    
     return functionData->current[nt][nz];
 }

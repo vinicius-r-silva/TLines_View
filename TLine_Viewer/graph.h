@@ -20,10 +20,10 @@ private:
     int width;
     int height;
 
-    int min_t;
-    int min_z;
-    int max_t;
-    int max_z;
+    double min_t;
+    double min_z;
+    double max_t;
+    double max_z;
     double dt;
     double dz;
 
@@ -54,9 +54,9 @@ private:
     cv::Vec3b sycamore;
 
 public:
-    Graph(functionData_t *fdata, int width, int height, int TMax, int ZMax, double dt, double dz);
+    Graph(functionData_t *fdata, int width, int height, double TMax, double ZMax, double dt, double dz);
     cv::Mat print_img(PrintParameters p);
-    void updateParameters(functionData_t *fdata, int nt, int nz, double dt, double dz);
+    void updateParameters(functionData_t *fdata, double nt, double nz, double dt, double dz);
 
     cv::Mat TFixed_Graph(double t);
     cv::Mat ZFixed_Graph(double z);
