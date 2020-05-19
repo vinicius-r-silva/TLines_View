@@ -20,7 +20,7 @@ TView::TView(QWidget *parent) : QMainWindow(parent),
     vol = CONTINUA;
     res = ZERO;
     zFix = 0;
-    tFix = 0.000000037;
+    tFix = 0;
     dt = 0.000000037;
     nt = 0.0000003;
     dz = 0.01;

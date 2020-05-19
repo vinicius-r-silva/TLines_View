@@ -71,6 +71,11 @@ functionData_t* calculateAllValues(functionData_t* functionData, int vol, int re
     const double C3 = (-2.0*dt) / (dt*dz*_G + 2*dz*C);
     const double C4 = (2.0*C - dt*_G) / (2*C + dt*_G);
 
+
+    std::cout << "K: "<< K << std::endl;
+    std::cout << "N: "<< N << std::endl;
+
+
     std::cout << "C: "<< C << std::endl;
     std::cout << "L: "<< L << std::endl;
 
@@ -102,18 +107,16 @@ functionData_t* calculateAllValues(functionData_t* functionData, int vol, int re
     for (t = 0; t < N + 1; t++)
     {
         voltage[t][0] = 2;
-        current[t][0] = 2.0 / (Z0 + Zl + Rs);
+        current[t][0] = 0;
     }
-
+    */
+    
     for (z = 1; z < K + 1; z++)
     {
         voltage[0][z] = 0;
         current[0][z] = 0;
-
-        voltage[1][z] = 0;
-        current[1][z] = 0;
     }
-    */
+    
     std::cout << "parte inicial completa" << std::endl;
 
 
