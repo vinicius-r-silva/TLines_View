@@ -17,11 +17,11 @@ TView::TView(QWidget *parent) : QMainWindow(parent),
     vol = CONTINUA;
     res = ZERO;
 
-    zFix = 0.0;
-    tFix = 0.0;
+    zFix = 0;//0.01;
+    tFix = /*4**/0.000000037;
 
-    ui->zLine->setText(QString::number(0.0));
-    ui->tLine->setText(QString::number(0.0));
+    ui->zLine->setText(QString::number(zFix));
+    ui->tLine->setText(QString::number(tFix));
 
     ui->dT->setText(QString::number(0.000000037));
     ui->nT->setText(QString::number(0.0000003));
@@ -54,7 +54,7 @@ TView::TView(QWidget *parent) : QMainWindow(parent),
 
 
     updateTGraphic();
-    //updateZGraphic();
+    updateZGraphic();
 
     this->setWindowTitle("Transmission Lines");
     changed = false;

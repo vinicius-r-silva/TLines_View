@@ -147,6 +147,12 @@ cv::Mat Graph::print_img(PrintParameters p){
         ic = (printable_height / 2) - ic;
         
         px = i / QTD_PER_PX + s_y_label_size; 
+        if(vo < 0) vo = 0;
+        if(vo > printable_height) vo = printable_height;
+        
+        if(ic < 0) ic = 0;
+        if(ic > printable_height) ic = printable_height;
+
         cv::line(image, cv::Point(px, prev_vo), cv::Point(px, vo), vo_color, SCALE);
         cv::line(image, cv::Point(px, prev_ic), cv::Point(px, ic), ic_color, SCALE);
 

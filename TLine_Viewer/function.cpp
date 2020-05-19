@@ -173,7 +173,7 @@ double getVoltage(functionData_t* functionData,double t, double z, double dt, do
     int nt = t/dt;
     int nz = z/dz;
     
-    if(nz < 100)
+    if(nz <= 50)
         std::cout << "v " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << functionData->voltage[nt][nz] << std::endl;
     
     return functionData->voltage[nt][nz];
@@ -184,7 +184,7 @@ double getCurrent(functionData_t* functionData,double t, double z, double dt, do
     int nt = t/dt;
     int nz = z/dz;
     
-    if(nz < 100)
+    if(nz <= 50)
         std::cout << "c " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << functionData->current[nt][nz] << std::endl;
     
     return functionData->current[nt][nz];
