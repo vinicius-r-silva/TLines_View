@@ -15,7 +15,7 @@ TView::TView(QWidget *parent) : QMainWindow(parent),
     QSize iconsSize(46, 46);
 
     vol = CONTINUA;
-    res = ZERO;
+    res = CEM;
 
     zFix = 0;//0.01;
     tFix = /*4**/0.000000037;
@@ -50,7 +50,7 @@ TView::TView(QWidget *parent) : QMainWindow(parent),
     ui->thirdR->setIconSize(iconsSize);
 
     ui->firstV->setChecked(true);
-    ui->secondR->setChecked(true);
+    ui->thirdR->setChecked(true);
 
 
     updateTGraphic();
