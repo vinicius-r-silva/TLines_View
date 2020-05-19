@@ -39,6 +39,9 @@ private slots:
 
     bool parametersValid();
 
+    void on_SliderT_valueChanged();
+    void on_SliderZ_valueChanged();
+
 private:
     functionData_t *datas;
     Ui::TView *ui;

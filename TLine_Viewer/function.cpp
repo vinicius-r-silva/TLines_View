@@ -71,6 +71,14 @@ functionData_t* calculateAllValues(functionData_t* functionData, int vol, int re
     const double C3 = (-2.0*dt) / (dt*dz*_G + 2*dz*C);
     const double C4 = (2.0*C - dt*_G) / (2*C + dt*_G);
 
+    // if(res == )
+    double Zl = 0;
+    if(res == ZERO)
+        Zl = 0;
+    else if(res == CEM)
+        Zl = 100;
+    else if(res == INFINITA)
+        Zl = std::numeric_limits<double>::max();
 
     std::cout << "K: "<< K << std::endl;
     std::cout << "N: "<< N << std::endl;

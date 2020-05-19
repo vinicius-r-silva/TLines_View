@@ -338,6 +338,32 @@
      <string>Recalcular Gráfico</string>
     </property>
    </widget>
+   <widget class="QSlider" name="SliderT">
+    <property name="geometry">
+     <rect>
+      <x>329</x>
+      <y>400</y>
+      <width>31</width>
+      <height>281</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="QSlider" name="SliderZ">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>60</y>
+      <width>31</width>
+      <height>281</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
