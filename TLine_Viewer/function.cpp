@@ -81,7 +81,7 @@ functionData_t* calculateAllValues(functionData_t* functionData, int vol, int re
     double maxVoltage = 2;
 
     double minCurrent = 0;
-    double maxCurrent = 2 / (Z0 + Zl + Rs);
+    double maxCurrent = 2.0 / (Z0 + Zl + Rs);
 
 
     std::cout << "iniciando calculo" << std::endl;
@@ -90,13 +90,13 @@ functionData_t* calculateAllValues(functionData_t* functionData, int vol, int re
     for (t = 0; t < N + 1; t++)
     {
         voltage[t][0] = 2;
-        current[t][0] = 2 / (Z0 + Zl + Rs);
+        current[t][0] = 2.0 / (Z0 + Zl + Rs);
     }
 
-    for (z = 1; z < K; z++)
+    for (z = 1; z < K + 1; z++)
     {
-        voltage[0][z + 1] = 0;
-        current[0][z + 1] = 0;
+        voltage[0][z] = 0;
+        current[0][z] = 0;
     }
 
     std::cout << "parte inicial completa" << std::endl;
