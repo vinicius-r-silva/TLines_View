@@ -5,5 +5,8 @@
         <file>icons/secondR.png</file>
         <file>icons/secondV.png</file>
         <file>icons/thirdR.png</file>
+        <file>icons/small_pause.png</file>
+        <file>icons/small_play.png</file>
+        <file>icons/small_stop.png</file>
     </qresource>
 </RCC>
