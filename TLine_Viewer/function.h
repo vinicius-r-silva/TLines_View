@@ -15,9 +15,6 @@
 
 #define Z0 50
 #define Rs 75
-//#define Zl infinity
-// #define Zl 0
-//#define Zl 100
 
 #define DEGRAU 0
 #define CONTINUA 1

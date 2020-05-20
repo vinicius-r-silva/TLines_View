@@ -77,13 +77,13 @@ functionData_t* calculateAllValues(functionData_t* functionData, int vol, int re
     const double C4 = 1;
 
 
-    double Zl = 100;
-    if(res == ZERO)
-        Zl = 0;
-    else if(res == CEM)
-        Zl = 100;
-    else if(res == INFINITA)
-        Zl = std::numeric_limits<double>::max();
+    const double Zl = 100;
+    // if(res == ZERO)
+    //     Zl = 0;
+    // else if(res == CEM)
+    //     Zl = 100;
+    // else if(res == INFINITA)
+    //     Zl = std::numeric_limits<double>::max();
 
     const double _REFLECTION_SOURCE = (double) (Rs - Z0)/(Rs + Z0);
     const double _REFLECTION_LOAD = (Zl - Z0)/(Zl + Z0);
@@ -102,6 +102,7 @@ functionData_t* calculateAllValues(functionData_t* functionData, int vol, int re
 
     std::cout << "Vph: "<< Vph << std::endl;
     std::cout << "_REFLECTION_LOAD: "<< _REFLECTION_LOAD << std::endl;
+    std::cout << "_REFLECTION_SOURCE: "<< _REFLECTION_SOURCE << std::endl;
 
     int t;
     int z;
@@ -165,14 +166,13 @@ functionData_t* calculateAllValues(functionData_t* functionData, int vol, int re
         if(!((t+1) % K) && (t+1) % (2*K)){
             
             powerL++;
-            voltage[t + 1][K] += voltage[t][K-1] * powf64(_REFLECTION_LOAD, powerL);
+            voltage[t + 1][K] += voltage[t][K-1] * powf64(_REFLECTION_LOAD, powerL) * powf64(_REFLECTION_SOURCE, powerS);
         
         }
         
         if(!((t+1) % (2*K))){
-
             powerS++;
-            voltage[t + 1][0] += voltage[t][1] * powf64(_REFLECTION_SOURCE, powerS);
+            voltage[t + 1][0] += voltage[t][1] * powf64(_REFLECTION_LOAD, powerL) * powf64(_REFLECTION_SOURCE, powerS);
         }
 
     }
