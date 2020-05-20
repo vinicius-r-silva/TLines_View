@@ -177,7 +177,7 @@ cv::Mat Graph::print_img(PrintParameters p){
     i = s_x_label_dist;
     for(; i < s_width - s_x_label_dist; i += s_x_label_dist){
         if(p.xLabel[0] == 'T')
-            sprintf(value, "%.2f", 10000000 * dx * i * QTD_PER_PX);
+            sprintf(value, "%.1e", dx * i * QTD_PER_PX);
         else
             sprintf(value, "%.2f", dx * i * QTD_PER_PX);
 
