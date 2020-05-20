@@ -170,7 +170,7 @@ cv::Mat Graph::print_img(PrintParameters p){
 
     i = s_x_label_dist;
     for(; i < s_width - s_x_label_dist; i += s_x_label_dist){
-        sprintf(value, "%.2f", dx * i * QTD_PER_PX);
+        sprintf(value, "%.2f", 1000000000 * dx * i * QTD_PER_PX);
         textSize = getTextSize(value, cv::FONT_HERSHEY_PLAIN, 1 * SCALE, 1 * SCALE, 0);
         cv::putText(image, value, cv::Point(i + s_y_label_size - textSize.width, s_height - 5), cv::FONT_HERSHEY_PLAIN, 1 * SCALE, black, 1 * SCALE);
     }

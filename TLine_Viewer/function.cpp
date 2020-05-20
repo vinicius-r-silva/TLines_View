@@ -66,13 +66,18 @@ functionData_t* calculateAllValues(functionData_t* functionData, int vol, int re
     int K = nz/dz;
     int N = nt/dt;
 
-    const double C1 = (-2.0*dt) / (dt*dz*_R + 2*dz*L);
-    const double C2 = (2.0*L - dt*_R) / (2*L + dt*_R);
-    const double C3 = (-2.0*dt) / (dt*dz*_G + 2*dz*C);
-    const double C4 = (2.0*C - dt*_G) / (2*C + dt*_G);
+    //const double C1 = (-2.0*dt) / (dt*dz*_R + 2*dz*L);
+    //const double C2 = (2.0*L - dt*_R) / (2*L + dt*_R);
+    //const double C3 = (-2.0*dt) / (dt*dz*_G + 2*dz*C);
+    //const double C4 = (2.0*C - dt*_G) / (2*C + dt*_G);
 
-    // if(res == )
-    double Zl = 0;
+    const double C1 = -dt / (dz*L); //-0.01998
+    const double C2 = 1;
+    const double C3 = -dt / (dz*C); //-49.95
+    const double C4 = 1;
+
+
+    double Zl = 100;
     if(res == ZERO)
         Zl = 0;
     else if(res == CEM)
@@ -107,17 +112,30 @@ functionData_t* calculateAllValues(functionData_t* functionData, int vol, int re
 
     std::cout << "iniciando calculo" << std::endl;
 
-    //inicial values
-    voltage[0][0] = 2;
-    current[0][0] = 2.0 / (Z0 + Zl + Rs);
-
-    /*
     for (t = 0; t < N + 1; t++)
     {
-        voltage[t][0] = 2;
-        current[t][0] = 0;
+        for (z = 0; z < K+1; z++){
+            current[t][z] = 0;
+            voltage[t][z] = 0;
+        }
     }
-    */
+
+    //inicial values
+    // voltage[0][0] = 2;
+    // current[0][0] = 0;//2.0 / (Z0 + Zl + Rs);
+
+
+    // for (t = 0; t < N + 1; t++)
+    // {
+    //     memset(voltage[t], 0, sizeof(double) * K+1);
+    //     memset(current[t], 0, sizeof(double) * K+1);
+    // }
+
+    // for (t = 0; t < N + 1; t++)
+    // {
+    //     voltage[t][0] = 2;
+    //     current[t][0] = 0;
+    // }
     
     for (z = 1; z < K + 1; z++)
     {
@@ -127,13 +145,18 @@ functionData_t* calculateAllValues(functionData_t* functionData, int vol, int re
     
     std::cout << "parte inicial completa" << std::endl;
 
+    //  C1 = -0.01998
+    //  C2 = 1;
+    //  C3 = -49.95
+    //  C4 = 1;
 
     for (t = 0; t < N; t++)
     {
+        voltage[t][0] = 2;
         for (z = 0; z < K; z++){
             // double cur = C1 * (voltage[t][z + 1] - voltage[t][z - 1]) + C2 * current[t - 1][z];
             current[t + 1][z] = C1 * (voltage[t][z + 1] - voltage[t][z]) + C2 * current[t][z];
-            /* 
+            /*
             if(!std::isinf(current[t + 1][z]) && current[t + 1][z] > maxCurrent)
                 maxCurrent = current[t + 1][z];
             else if(!std::isinf(current[t + 1][z]) && current[t + 1][z] < minCurrent)
@@ -144,7 +167,6 @@ functionData_t* calculateAllValues(functionData_t* functionData, int vol, int re
         for (z = 0; z < K; z++){
             // double cur = C3 * (current[t + 1][z + 1] - current[t + 1][z]) + C4 * current[t][z + 1];
             voltage[t + 1][z + 1] = C3 * (current[t + 1][z + 1] - current[t + 1][z]) + C4 * voltage[t][z + 1];
-
             /*
             if(!std::isinf(voltage[t + 1][z + 1]) && voltage[t + 1][z + 1] > maxVoltage)
                 maxVoltage = voltage[t + 1][z + 1];
@@ -152,6 +174,11 @@ functionData_t* calculateAllValues(functionData_t* functionData, int vol, int re
                 minVoltage = voltage[t + 1][z + 1];
             */
         }
+        // voltage[t+1][0] = 
+        //vn(1) = (v(1)*(1/dz + G*RS/2 - C*RS/dt) + 2*RS*in(1)/dz - vg(n-1)/dz - vg(n)/dz)/(-1/dz - G*RS/2 - C*RS/dt);
+        //voltage[t+1][0] = (voltage[t][0] * (1/dz - C*Rs/dt) + 2*Rs*current[t+1][0]/dz - 2*2/dz)/(-1/dz - C*Rs/dt);
+        //voltage[t + 1][0] = C3 * (current[t + 1][z + 1] - current[t + 1][z]) + C4 * voltage[t][z + 1];
+
 
         // std::cout << "t: " << t << std::endl;
     }
@@ -176,24 +203,54 @@ functionData_t* calculateAllValues(functionData_t* functionData, int vol, int re
     return functionData;
 }
 
-double getVoltage(functionData_t* functionData,double t, double z, double dt, double dz){
+double getVoltage(functionData_t* functionData, double t, double z, double dt, double dz){
+
+    static double debugT = -1;
+    static double debugZ = -1;
 
     int nt = t/dt;
     int nz = z/dz;
     
-    if(nz <= 50)
-        std::cout << "v " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << functionData->voltage[nt][nz] << std::endl;
-    
+    if(debugT != nt){
+        debugT = nt;
+
+        if(nz <= 50)
+            std::cout << "v " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << functionData->voltage[nt][nz] << std::endl;
+
+    }
+
+    if(debugZ != nz){
+        debugZ = nz;
+
+        if(nz <= 50)
+            std::cout << "v " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << functionData->voltage[nt][nz] << std::endl;
+
+    }
     return functionData->voltage[nt][nz];
 }
 
-double getCurrent(functionData_t* functionData,double t, double z, double dt, double dz){
+double getCurrent(functionData_t* functionData, double t, double z, double dt, double dz){
+    
+    static double debugT = -1;
+    static double debugZ = -1;
 
     int nt = t/dt;
     int nz = z/dz;
     
-    if(nz <= 50)
-        std::cout << "c " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << functionData->current[nt][nz] << std::endl;
+    if(debugT != nt){
+        debugT = nt;
+
+        if(nz <= 50)
+            std::cout << "c " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << functionData->current[nt][nz] << std::endl;
+    }
+
+    if(debugZ != nz){
+        debugZ = nz;
+
+        if(nz <= 50)
+            std::cout << "c " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << functionData->current[nt][nz] << std::endl;
+
+    }
     
     return functionData->current[nt][nz];
 }
