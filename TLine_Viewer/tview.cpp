@@ -43,6 +43,16 @@ TView::TView(QWidget *parent) : QMainWindow(parent),
     ui->secondR->setIcon(QIcon(":/icons/secondR.png"));
     ui->thirdR->setIcon(QIcon(":/icons/thirdR.png"));
 
+    ui->BtPauseT->setIcon(QIcon(":/icons/small_pause.png"));
+    ui->BtPauseZ->setIcon(QIcon(":/icons/small_pause.png"));
+    ui->BtPlayT->setIcon(QIcon(":/icons/small_play.png"));
+    ui->BtPlayZ->setIcon(QIcon(":/icons/small_play.png"));
+    ui->BtStopT->setIcon(QIcon(":/icons/small_stop.png"));
+    ui->BtStopZ->setIcon(QIcon(":/icons/small_stop.png"));
+
+    ui->SlAnimationT->setValue(100);
+    ui->SlAnimationZ->setValue(100);
+
     ui->firstV->setIconSize(iconsSize);
     ui->secondV->setIconSize(QSize(120, 180));
     ui->firstR->setIconSize(iconsSize);
