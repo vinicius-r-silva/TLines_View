@@ -62,6 +62,8 @@ cv::Mat Graph::TFixed_Graph(double t){
     fixedT = t;
 
     PrintParameters p;
+    p.xLabel[0] = 'Z';
+    p.xLabel[1] = '\0';
     p.max_x = max_z;
     p.voltage = &Graph::TFixed_vo;
     p.current = &Graph::TFixed_ic;
@@ -74,6 +76,8 @@ cv::Mat Graph::ZFixed_Graph(double z){
     fixedZ = z;
 
     PrintParameters p;
+    p.xLabel[0] = 'T';
+    p.xLabel[1] = '\0';
     p.max_x = max_t;
     p.voltage = &Graph::ZFixed_vo;
     p.current = &Graph::ZFixed_ic;
@@ -172,7 +176,11 @@ cv::Mat Graph::print_img(PrintParameters p){
 
     i = s_x_label_dist;
     for(; i < s_width - s_x_label_dist; i += s_x_label_dist){
-        sprintf(value, "%.2f", 1000000000 * dx * i * QTD_PER_PX);
+        if(p.xLabel[0] == 'T')
+            sprintf(value, "%.2f", 10000000 * dx * i * QTD_PER_PX);
+        else
+            sprintf(value, "%.2f", dx * i * QTD_PER_PX);
+
         textSize = getTextSize(value, cv::FONT_HERSHEY_PLAIN, 1 * SCALE, 1 * SCALE, 0);
         cv::putText(image, value, cv::Point(i + s_y_label_size - textSize.width, s_height - 5), cv::FONT_HERSHEY_PLAIN, 1 * SCALE, black, 1 * SCALE);
     }
@@ -199,7 +207,7 @@ cv::Mat Graph::print_img(PrintParameters p){
     cv::putText(image, "v", cv::Point(30 * SCALE, 20 * SCALE), cv::FONT_HERSHEY_SIMPLEX, 1.0 * SCALE, vo_color, 2 * SCALE);
     cv::putText(image, "i", cv::Point(95 * SCALE, 20 * SCALE), cv::FONT_HERSHEY_SIMPLEX, 0.8 * SCALE, ic_color, 2 * SCALE);
 
-    cv::putText(image, "Z", cv::Point(s_width - 25 * SCALE, s_height - 5 * SCALE), cv::FONT_HERSHEY_SIMPLEX, 0.8 * SCALE, black, 2 * SCALE);
+    cv::putText(image, p.xLabel, cv::Point(s_width - 25 * SCALE, s_height - 5 * SCALE), cv::FONT_HERSHEY_SIMPLEX, 0.8 * SCALE, black, 2 * SCALE);
     
     cv::resize(image, image, cv::Size(), 1.0 / double(SCALE), 1.0 / double(SCALE), cv::INTER_CUBIC);
     return image;
