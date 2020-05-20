@@ -85,6 +85,9 @@ functionData_t* calculateAllValues(functionData_t* functionData, int vol, int re
     else if(res == INFINITA)
         Zl = std::numeric_limits<double>::max();
 
+    const double _REFLECTION_SOURCE = (double) (Rs - Z0)/(Rs + Z0);
+    const double _REFLECTION_LOAD = (Zl - Z0)/(Zl + Z0);
+
     std::cout << "K: "<< K << std::endl;
     std::cout << "N: "<< N << std::endl;
 
@@ -96,6 +99,9 @@ functionData_t* calculateAllValues(functionData_t* functionData, int vol, int re
     std::cout << "C2: "<< C2 << std::endl;
     std::cout << "C3: "<< C3 << std::endl;
     std::cout << "C4: "<< C4 << std::endl;
+
+    std::cout << "Vph: "<< Vph << std::endl;
+    std::cout << "_REFLECTION_LOAD: "<< _REFLECTION_LOAD << std::endl;
 
     int t;
     int z;
@@ -121,21 +127,9 @@ functionData_t* calculateAllValues(functionData_t* functionData, int vol, int re
     }
 
     //inicial values
-    // voltage[0][0] = 2;
-    // current[0][0] = 0;//2.0 / (Z0 + Zl + Rs);
+    voltage[0][0] = 2;
+    current[0][0] = 0;//2.0 / (Z0 + Zl + Rs);
 
-
-    // for (t = 0; t < N + 1; t++)
-    // {
-    //     memset(voltage[t], 0, sizeof(double) * K+1);
-    //     memset(current[t], 0, sizeof(double) * K+1);
-    // }
-
-    // for (t = 0; t < N + 1; t++)
-    // {
-    //     voltage[t][0] = 2;
-    //     current[t][0] = 0;
-    // }
     
     for (z = 1; z < K + 1; z++)
     {
@@ -149,54 +143,45 @@ functionData_t* calculateAllValues(functionData_t* functionData, int vol, int re
     //  C2 = 1;
     //  C3 = -49.95
     //  C4 = 1;
+    int powerL = 0;
+    int powerS = 0;
 
     for (t = 0; t < N; t++)
     {
-        voltage[t][0] = 2;
+
         for (z = 0; z < K; z++){
             // double cur = C1 * (voltage[t][z + 1] - voltage[t][z - 1]) + C2 * current[t - 1][z];
             current[t + 1][z] = C1 * (voltage[t][z + 1] - voltage[t][z]) + C2 * current[t][z];
-            /*
-            if(!std::isinf(current[t + 1][z]) && current[t + 1][z] > maxCurrent)
-                maxCurrent = current[t + 1][z];
-            else if(!std::isinf(current[t + 1][z]) && current[t + 1][z] < minCurrent)
-                minCurrent = current[t + 1][z];
-            */
         }
 
-        for (z = 0; z < K; z++){
+        for (z = 0; z < K-1; z++){
             // double cur = C3 * (current[t + 1][z + 1] - current[t + 1][z]) + C4 * current[t][z + 1];
             voltage[t + 1][z + 1] = C3 * (current[t + 1][z + 1] - current[t + 1][z]) + C4 * voltage[t][z + 1];
-            /*
-            if(!std::isinf(voltage[t + 1][z + 1]) && voltage[t + 1][z + 1] > maxVoltage)
-                maxVoltage = voltage[t + 1][z + 1];
-            else if(!std::isinf(voltage[t + 1][z + 1]) && voltage[t + 1][z + 1] < minVoltage)
-                minVoltage = voltage[t + 1][z + 1];
-            */
         }
-        // voltage[t+1][0] = 
-        //vn(1) = (v(1)*(1/dz + G*RS/2 - C*RS/dt) + 2*RS*in(1)/dz - vg(n-1)/dz - vg(n)/dz)/(-1/dz - G*RS/2 - C*RS/dt);
-        //voltage[t+1][0] = (voltage[t][0] * (1/dz - C*Rs/dt) + 2*Rs*current[t+1][0]/dz - 2*2/dz)/(-1/dz - C*Rs/dt);
-        //voltage[t + 1][0] = C3 * (current[t + 1][z + 1] - current[t + 1][z]) + C4 * voltage[t][z + 1];
+        
+        voltage[t + 1][K] = voltage[t][K-1];
+        voltage[t + 1][0] = voltage[t][0] + (voltage[t+1][1]-voltage[t][0])*(Vph*dt-dz)/(Vph*dt+dz);
 
+        if(!((t+1) % K) && (t+1) % (2*K)){
+            
+            powerL++;
+            voltage[t + 1][K] += voltage[t][K-1] * powf64(_REFLECTION_LOAD, powerL);
+        
+        }
+        
+        if(!((t+1) % (2*K))){
 
-        // std::cout << "t: " << t << std::endl;
+            powerS++;
+            voltage[t + 1][0] += voltage[t][1] * powf64(_REFLECTION_SOURCE, powerS);
+        }
+
     }
 
     functionData->minVoltage = minVoltage;
     functionData->maxVoltage = maxVoltage;
 
     functionData->minCurrent = minCurrent;
-    functionData->maxCurrent = maxCurrent;
-
-
-    std::cout << "calculo principal terminado" << std::endl;
-
-    //curto circuito
-    for (t = 0; t < N; t++)
-    {
-        voltage[t][K] = 0;
-    }
+    functionData->maxCurrent = maxCurrent;    
 
     std::cout << "calculo terminado" << std::endl;
 
@@ -214,7 +199,7 @@ double getVoltage(functionData_t* functionData, double t, double z, double dt, d
     if(debugT != nt){
         debugT = nt;
 
-        if(nz <= 50)
+        if(nz <= 50);
             std::cout << "v " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << functionData->voltage[nt][nz] << std::endl;
 
     }
@@ -222,7 +207,7 @@ double getVoltage(functionData_t* functionData, double t, double z, double dt, d
     if(debugZ != nz){
         debugZ = nz;
 
-        if(nz <= 50)
+        if(nz <= 50);
             std::cout << "v " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << functionData->voltage[nt][nz] << std::endl;
 
     }

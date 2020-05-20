@@ -29,6 +29,8 @@
 const double C = 7.40741 * powf64x(10, -11);
 const double L = 1.85185 * powf64x(10, -7);
 
+const double Vph = 1/sqrt(C*L);
+
 typedef struct functionData_t{
 
     double **voltage;
