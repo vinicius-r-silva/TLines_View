@@ -37,6 +37,7 @@ double Graph::TFixed_ic(double z){
     //      return 0.0;
 
     return getCurrent(fdata, fixedT, z, dt, dz);
+    // return 0.0;
     // return (fixedT - 2)*sin(0.19*z) + (fixedT + 5)*sin(0.25*z) + (fixedT - 0.5)*cos(1*z) + (fixedT + 10)*sin(1.4*z) + (fixedT - 5)*cos(1*z) + (fixedT + 5)*cos(0.35*z);
 }
 
@@ -52,7 +53,8 @@ double Graph::ZFixed_ic(double t){
     // if(t >= max_t || t < 0)
     //      return 0.0;
          
-    return getCurrent(fdata, t, fixedZ, dt, dz); 
+    return getCurrent(fdata, t, fixedZ, dt, dz);
+    // return 0.0;
     // return (fixedZ - 2)*sin(1.09*t) + (fixedZ + 5)*sin(0.39*t) + (fixedZ - 0.5)*cos(0.59*t) + (fixedZ + 10)*sin(1.2*t) + (fixedZ - 5)*cos(1.29*t) + (fixedZ + 5)*cos(1.45*t);
 }
 
@@ -60,6 +62,8 @@ cv::Mat Graph::TFixed_Graph(double t){
     fixedT = t;
 
     PrintParameters p;
+    p.xLabel[0] = 'Z';
+    p.xLabel[1] = '\0';
     p.max_x = max_z;
     p.voltage = &Graph::TFixed_vo;
     p.current = &Graph::TFixed_ic;
@@ -72,6 +76,8 @@ cv::Mat Graph::ZFixed_Graph(double z){
     fixedZ = z;
 
     PrintParameters p;
+    p.xLabel[0] = 'T';
+    p.xLabel[1] = '\0';
     p.max_x = max_t;
     p.voltage = &Graph::ZFixed_vo;
     p.current = &Graph::ZFixed_ic;
@@ -170,7 +176,11 @@ cv::Mat Graph::print_img(PrintParameters p){
 
     i = s_x_label_dist;
     for(; i < s_width - s_x_label_dist; i += s_x_label_dist){
-        sprintf(value, "%.2f", 1000000000 * dx * i * QTD_PER_PX);
+        if(p.xLabel[0] == 'T')
+            sprintf(value, "%.2f", 10000000 * dx * i * QTD_PER_PX);
+        else
+            sprintf(value, "%.2f", dx * i * QTD_PER_PX);
+
         textSize = getTextSize(value, cv::FONT_HERSHEY_PLAIN, 1 * SCALE, 1 * SCALE, 0);
         cv::putText(image, value, cv::Point(i + s_y_label_size - textSize.width, s_height - 5), cv::FONT_HERSHEY_PLAIN, 1 * SCALE, black, 1 * SCALE);
     }
@@ -197,7 +207,7 @@ cv::Mat Graph::print_img(PrintParameters p){
     cv::putText(image, "v", cv::Point(30 * SCALE, 20 * SCALE), cv::FONT_HERSHEY_SIMPLEX, 1.0 * SCALE, vo_color, 2 * SCALE);
     cv::putText(image, "i", cv::Point(95 * SCALE, 20 * SCALE), cv::FONT_HERSHEY_SIMPLEX, 0.8 * SCALE, ic_color, 2 * SCALE);
 
-    cv::putText(image, "Z", cv::Point(s_width - 25 * SCALE, s_height - 5 * SCALE), cv::FONT_HERSHEY_SIMPLEX, 0.8 * SCALE, black, 2 * SCALE);
+    cv::putText(image, p.xLabel, cv::Point(s_width - 25 * SCALE, s_height - 5 * SCALE), cv::FONT_HERSHEY_SIMPLEX, 0.8 * SCALE, black, 2 * SCALE);
     
     cv::resize(image, image, cv::Size(), 1.0 / double(SCALE), 1.0 / double(SCALE), cv::INTER_CUBIC);
     return image;

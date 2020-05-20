@@ -34,6 +34,7 @@ private:
     double max_ic, min_ic;
 
     struct PrintParameters{
+        char xLabel[2];
         double (Graph::*voltage)(double);
         double (Graph::*current)(double);
 
