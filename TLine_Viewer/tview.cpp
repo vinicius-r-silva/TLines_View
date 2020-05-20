@@ -87,14 +87,13 @@ void TView::updateZGraphic(){
     ui->zGraphic->setPixmap(QPixmap::fromImage(QImage(img.data, img.cols, img.rows, img.step, QImage::Format_RGB888)));
 }
 
-
 void TView::on_SliderT_valueChanged(){
     ui->tLine->setText(QString::number(double(ui->SliderT->value()) / 100000000));
 }
+
 void TView::on_SliderZ_valueChanged(){
     ui->zLine->setText(QString::number(double(ui->SliderZ->value())));
 }
-
 
 void TView::on_zLine_textChanged(const QString &arg1){
     std::string edit = arg1.toStdString();
