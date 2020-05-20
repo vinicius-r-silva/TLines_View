@@ -17,15 +17,15 @@ TView::TView(QWidget *parent) : QMainWindow(parent),
     vol = CONTINUA;
     res = CEM;
 
-    zFix = 0;//0.01;
-    tFix = /*4**/0.000000037;
+    zFix = 0;
+    tFix = 0;///*4**/0.0000000037;
 
     ui->zLine->setText(QString::number(zFix));
     ui->tLine->setText(QString::number(tFix));
 
-    ui->dT->setText(QString::number(0.000000037));
-    ui->nT->setText(QString::number(0.0000003));
-    ui->dZ->setText(QString::number(0.01));
+    ui->dT->setText(QString::number(0.0000000037));
+    ui->nT->setText(QString::number(0.000003));
+    ui->dZ->setText(QString::number(1));
     ui->nZ->setText(QString::number(100));
 
     dtPrev = dt;
