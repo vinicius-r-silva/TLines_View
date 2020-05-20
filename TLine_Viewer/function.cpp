@@ -199,16 +199,16 @@ double getVoltage(functionData_t* functionData, double t, double z, double dt, d
     if(debugT != nt){
         debugT = nt;
 
-        if(nz <= 50);
-            std::cout << "v " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << functionData->voltage[nt][nz] << std::endl;
+//        if(nz <= 50);
+//            std::cout << "v " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << functionData->voltage[nt][nz] << std::endl;
 
     }
 
     if(debugZ != nz){
         debugZ = nz;
 
-        if(nz <= 50);
-            std::cout << "v " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << functionData->voltage[nt][nz] << std::endl;
+//        if(nz <= 50);
+//            std::cout << "v " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << functionData->voltage[nt][nz] << std::endl;
 
     }
     return functionData->voltage[nt][nz];
@@ -225,15 +225,15 @@ double getCurrent(functionData_t* functionData, double t, double z, double dt, d
     if(debugT != nt){
         debugT = nt;
 
-        if(nz <= 50)
-            std::cout << "c " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << functionData->current[nt][nz] << std::endl;
+        //if(nz <= 50)
+         //   std::cout << "c " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << functionData->current[nt][nz] << std::endl;
     }
 
     if(debugZ != nz){
         debugZ = nz;
 
-        if(nz <= 50)
-            std::cout << "c " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << functionData->current[nt][nz] << std::endl;
+//        if(nz <= 50)
+//            std::cout << "c " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << functionData->current[nt][nz] << std::endl;
 
     }
     

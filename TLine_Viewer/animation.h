@@ -6,12 +6,13 @@
 #include <QThreadPool>
 #include <QDebug>
 #include <unistd.h>
+#include "graph.h"
 
 class Animation : public QObject, public QRunnable
 {
     Q_OBJECT
 public:
-    explicit Animation(QLabel *imShow, double min, double max, double delay);
+    explicit Animation(Graph *graphs, QLabel *imShow, double min, double max, int steps, double delay);
 
 signals:
     void Tfinished();
@@ -22,11 +23,13 @@ private:
     double min;
     double max;
     double delay;
+    int steps;
 
     QLabel *imShow;
+    Graph *graphs;
 
 protected:
-void run();
+    void run();
 };
 
 #endif // ANIMATION_H

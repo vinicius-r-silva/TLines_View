@@ -4,6 +4,7 @@
 #include <iostream>
 
 #define MAXMEMORY 2000000000
+#define MAXDELAY 1
 
 TView::TView(QWidget *parent) : QMainWindow(parent),
     ui(new Ui::TView){
@@ -18,7 +19,9 @@ TView::TView(QWidget *parent) : QMainWindow(parent),
     res = CEM;
 
     zFix = 0;
-    tFix = 0;///*4**/0.0000000037;
+    tFix = 0;
+
+    std::cout << "DEBUG 1\n";
 
     ui->zLine->setText(QString::number(zFix));
     ui->tLine->setText(QString::number(tFix));
@@ -33,9 +36,14 @@ TView::TView(QWidget *parent) : QMainWindow(parent),
     dzPrev = dz;
     nzPrev = nz;
 
+    std::cout << "DEBUG 2\n";
+
     datas = NULL;
     datas = allocMemory(vol, res, dt, nt, dz, nz);
+    std::cout << "DEBUG 2.25\n";
     graphs = new Graph(datas, ui->zGraphic->width(), ui->zGraphic->height(), nt, nz, dt, dz);
+
+    std::cout << "DEBUG 2.5\n";
 
     ui->firstV->setIcon(QIcon(":/icons/firstV.png"));
     ui->secondV->setIcon(QIcon(":/icons/secondV.png"));
@@ -50,8 +58,16 @@ TView::TView(QWidget *parent) : QMainWindow(parent),
     ui->BtStopT->setIcon(QIcon(":/icons/small_stop.png"));
     ui->BtStopZ->setIcon(QIcon(":/icons/small_stop.png"));
 
+    std::cout << "DEBUG 3\n";
+
     ui->SlAnimationT->setValue(100);
     ui->SlAnimationZ->setValue(100);
+
+    animZ = new Animation(graphs, ui->tGraphic, 0.0, nt, 5, (double)(ui->SlAnimationZ->value() * MAXDELAY * 10));
+    animT = new Animation(graphs, ui->zGraphic, 0.0, nz, 5, (double)(ui->SlAnimationT->value() * MAXDELAY * 10));
+
+    QObject::connect(animZ, SIGNAL(Tfinished()), this, SLOT(animationZFinished()));
+    QObject::connect(animT, SIGNAL(Tfinished()), this, SLOT(animationTFinished()));
 
     ui->firstV->setIconSize(iconsSize);
     ui->secondV->setIconSize(QSize(120, 180));
@@ -75,6 +91,15 @@ TView::TView(QWidget *parent) : QMainWindow(parent),
 
 TView::~TView() {
     delete ui;
+}
+
+
+void TView::animationZFinished(){
+    QMessageBox::information(this, "Animação Z", "ACABOU A ANIMAÇÃO UHUUUUUUUUUUUUUUU!!!!");
+}
+
+void TView::animationTFinished(){
+    QMessageBox::information(this, "Animação T", "ACABOU A ANIMAÇÃO UHUUUUUUUUUUUUUUU!!!!");
 }
 
 bool TView::parametersValid(){
@@ -302,3 +327,13 @@ void TView::on_nZ_textChanged(const QString &arg1){
 }
 
 
+
+void TView::on_BtPlayT_clicked(){
+    std::cout << "Iniciando a thread do T\n";
+    QThreadPool::globalInstance()->start(animT);
+}
+
+void TView::on_BtPlayZ_clicked(){
+    std::cout << "Iniciando a thread do Z\n";
+    QThreadPool::globalInstance()->start(animZ);
+}

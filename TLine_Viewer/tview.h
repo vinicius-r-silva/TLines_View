@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QtWidgets>
+#include "animation.h"
 #include "graph.h"
 
 namespace Ui {
@@ -42,8 +43,17 @@ private slots:
     void on_SliderT_valueChanged();
     void on_SliderZ_valueChanged();
 
+    void animationZFinished();
+    void animationTFinished();
+
+    void on_BtPlayT_clicked();
+
+    void on_BtPlayZ_clicked();
+
 private:
     functionData_t *datas;
+    Animation *animZ;
+    Animation *animT;
     Ui::TView *ui;
     Graph *graphs;
 
