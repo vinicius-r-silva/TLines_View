@@ -36,7 +36,8 @@ double Graph::TFixed_ic(double z){
     // if(z >= max_z || z < 0)
     //      return 0.0;
 
-    return getCurrent(fdata, fixedT, z, dt, dz);
+    // return getCurrent(fdata, fixedT, z, dt, dz);
+    return 0.0;
     // return (fixedT - 2)*sin(0.19*z) + (fixedT + 5)*sin(0.25*z) + (fixedT - 0.5)*cos(1*z) + (fixedT + 10)*sin(1.4*z) + (fixedT - 5)*cos(1*z) + (fixedT + 5)*cos(0.35*z);
 }
 
@@ -52,7 +53,8 @@ double Graph::ZFixed_ic(double t){
     // if(t >= max_t || t < 0)
     //      return 0.0;
          
-    return getCurrent(fdata, t, fixedZ, dt, dz); 
+    // return getCurrent(fdata, t, fixedZ, dt, dz);
+    return 0.0;
     // return (fixedZ - 2)*sin(1.09*t) + (fixedZ + 5)*sin(0.39*t) + (fixedZ - 0.5)*cos(0.59*t) + (fixedZ + 10)*sin(1.2*t) + (fixedZ - 5)*cos(1.29*t) + (fixedZ + 5)*cos(1.45*t);
 }
 
