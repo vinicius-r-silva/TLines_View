@@ -151,50 +151,33 @@ functionData_t* calculateAllValues(functionData_t* FData, int vol, int res, doub
 
     for (t = 0; t < N; t++)
     {
-
         for (z = 0; z < K; z++){
-            // double cur = C1 * (voltage[t][z + 1] - voltage[t][z - 1]) + C2 * current[t - 1][z];
             current[t + 1][z] = C1 * (voltage[t][z + 1] - voltage[t][z]) + C2 * current[t][z];
         }
 
-        if(Zl == 0)
-            current[t+1][K-1] = 0;
-
-        for (z = 0; z < K-1; z++){
-            // double cur = C3 * (current[t + 1][z + 1] - current[t + 1][z]) + C4 * current[t][z + 1];
+        for (z = 0; z < K - 1; z++){
             voltage[t + 1][z + 1] = C3 * (current[t + 1][z + 1] - current[t + 1][z]) + C4 * voltage[t][z + 1];
         }
-        
-        
-        // boudry conditions
+            
+        // boundary conditions
         voltage[t + 1][K] = voltage[t][K-1];
 
-        if(Zl == 0)
+        if(res == ZERO){
             voltage[t+1][K-1] = 0;
-
-        if(Zl == 0)
             voltage[t+1][0] = voltage[t][1];
-        else
+        }else
             voltage[t + 1][0] = voltage[t][1] + (voltage[t+1][1]-voltage[t][0])*(Vph*dt-dz)/(Vph*dt+dz);
 
         //reflection part
         if(!((t+1) % K) && (t+1) % (2*K)){
             powerL++;
-            std::cout << "t(carga): " << t+1 << std::endl;
-            // getc(stdin);
-            voltage[t + 1][K-1] += voltage[t][K-2] * powf64(_REFLECTION_LOAD, powerL) * powf64(_REFLECTION_SOURCE, powerS);
+            voltage[t + 1][K-1] += voltage[t][K-2] * (powf64(_REFLECTION_LOAD, powerL) * powf64(_REFLECTION_SOURCE, powerS));
+            voltage[t + 1][K] = voltage[t + 1][K-1];
             
-            if(Zl < 10000)
-                voltage[t + 1][K] += voltage[t + 1][K-1] * powf64(_REFLECTION_LOAD, powerL) * powf64(_REFLECTION_SOURCE, powerS);
-            else 
-                voltage[t + 1][K] = voltage[t + 1][K-1];
-
         }
         
         if(!((t+1) % (2*K))){
             powerS++;
-            std::cout << "t(fonte): " << t+1 << std::endl;
-            // getc(stdin);
             voltage[t + 1][0] += voltage[t][1] * powf64(_REFLECTION_LOAD, powerL) * powf64(_REFLECTION_SOURCE, powerS);
         }
 
