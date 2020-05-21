@@ -77,7 +77,7 @@ functionData_t* calculateAllValues(functionData_t* functionData, int vol, int re
     const double C4 = 1;
 
 
-    const double Zl = 100;
+    const double Zl = 0;
     // if(res == ZERO)
     //     Zl = 0;
     // else if(res == CEM)
@@ -161,19 +161,25 @@ functionData_t* calculateAllValues(functionData_t* functionData, int vol, int re
         }
         
         voltage[t + 1][K] = voltage[t][K-1];
-        voltage[t + 1][0] = voltage[t][0] + (voltage[t+1][1]-voltage[t][0])*(Vph*dt-dz)/(Vph*dt+dz);
+        
+        if(Zl == 0)
+            voltage[t+1][0] = voltage[t][1];
+        else
+            voltage[t + 1][0] = voltage[t][0] + (voltage[t+1][1]-voltage[t][0])*(Vph*dt-dz)/(Vph*dt+dz);
 
         if(!((t+1) % K) && (t+1) % (2*K)){
-            
             powerL++;
             voltage[t + 1][K] += voltage[t][K-1] * powf64(_REFLECTION_LOAD, powerL) * powf64(_REFLECTION_SOURCE, powerS);
-        
         }
         
         if(!((t+1) % (2*K))){
             powerS++;
             voltage[t + 1][0] += voltage[t][1] * powf64(_REFLECTION_LOAD, powerL) * powf64(_REFLECTION_SOURCE, powerS);
         }
+
+        if(Zl == 0)
+            voltage[t+1][K] = 0;
+        
 
     }
 
