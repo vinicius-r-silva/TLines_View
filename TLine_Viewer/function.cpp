@@ -78,13 +78,14 @@ functionData_t* calculateAllValues(functionData_t* FData, int vol, int res, doub
 
 
     double Zl = 0;
-    
+
     if(res == ZERO)
         Zl = 0;
     else if(res == CEM)
         Zl = 100;
     else if(res == INFINITA)
         Zl = std::numeric_limits<double>::max();
+
 
     const double _REFLECTION_SOURCE = (double) (Rs - Z0)/(Rs + Z0);
     const double _REFLECTION_LOAD = (Zl - Z0)/(Zl + Z0);
@@ -129,7 +130,7 @@ functionData_t* calculateAllValues(functionData_t* FData, int vol, int res, doub
     }
 
     //inicial values
-    voltage[0][0] = 2;
+    voltage[0][0] = 2.0 * Z0/(Z0+Rs);
     current[0][0] = 0;//2.0 / (Z0 + Zl + Rs);
 
     
@@ -156,33 +157,46 @@ functionData_t* calculateAllValues(functionData_t* FData, int vol, int res, doub
             current[t + 1][z] = C1 * (voltage[t][z + 1] - voltage[t][z]) + C2 * current[t][z];
         }
 
+        if(Zl == 0)
+            current[t+1][K-1] = 0;
+
         for (z = 0; z < K-1; z++){
             // double cur = C3 * (current[t + 1][z + 1] - current[t + 1][z]) + C4 * current[t][z + 1];
             voltage[t + 1][z + 1] = C3 * (current[t + 1][z + 1] - current[t + 1][z]) + C4 * voltage[t][z + 1];
         }
         
         
-        //boudry conditions
+        // boudry conditions
         voltage[t + 1][K] = voltage[t][K-1];
 
         if(Zl == 0)
-            voltage[t+1][K] = 0;
+            voltage[t+1][K-1] = 0;
 
         if(Zl == 0)
             voltage[t+1][0] = voltage[t][1];
         else
-            voltage[t + 1][0] = voltage[t][0] + (voltage[t+1][1]-voltage[t][0])*(Vph*dt-dz)/(Vph*dt+dz);
+            voltage[t + 1][0] = voltage[t][1] + (voltage[t+1][1]-voltage[t][0])*(Vph*dt-dz)/(Vph*dt+dz);
 
         //reflection part
         if(!((t+1) % K) && (t+1) % (2*K)){
             powerL++;
-            voltage[t + 1][K] += voltage[t][K-1] * powf64(_REFLECTION_LOAD, powerL) * powf64(_REFLECTION_SOURCE, powerS);
+            std::cout << "t(carga): " << t+1 << std::endl;
+            // getc(stdin);
+            voltage[t + 1][K-1] += voltage[t][K-2] * powf64(_REFLECTION_LOAD, powerL) * powf64(_REFLECTION_SOURCE, powerS);
+            
+            if(Zl < 10000)
+                voltage[t + 1][K] += voltage[t + 1][K-1] * powf64(_REFLECTION_LOAD, powerL) * powf64(_REFLECTION_SOURCE, powerS);
+            else 
+                voltage[t + 1][K] = voltage[t + 1][K-1];
+
         }
         
         if(!((t+1) % (2*K))){
             powerS++;
+            std::cout << "t(fonte): " << t+1 << std::endl;
+            // getc(stdin);
             voltage[t + 1][0] += voltage[t][1] * powf64(_REFLECTION_LOAD, powerL) * powf64(_REFLECTION_SOURCE, powerS);
-        }        
+        }
 
     }
 
