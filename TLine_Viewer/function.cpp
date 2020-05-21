@@ -71,19 +71,20 @@ functionData_t* calculateAllValues(functionData_t* functionData, int vol, int re
     //const double C3 = (-2.0*dt) / (dt*dz*_G + 2*dz*C);
     //const double C4 = (2.0*C - dt*_G) / (2*C + dt*_G);
 
-    const double C1 = -dt / (dz*L); //-0.01998
+    const double C1 = -dt / (dz*L);
     const double C2 = 1;
-    const double C3 = -dt / (dz*C); //-49.95
+    const double C3 = -dt / (dz*C);
     const double C4 = 1;
 
 
-    const double Zl = 0;
-    // if(res == ZERO)
-    //     Zl = 0;
-    // else if(res == CEM)
-    //     Zl = 100;
-    // else if(res == INFINITA)
-    //     Zl = std::numeric_limits<double>::max();
+    double Zl = 0;
+    
+    if(res == ZERO)
+        Zl = 0;
+    else if(res == CEM)
+        Zl = 100;
+    else if(res == INFINITA)
+        Zl = std::numeric_limits<double>::max();
 
     const double _REFLECTION_SOURCE = (double) (Rs - Z0)/(Rs + Z0);
     const double _REFLECTION_LOAD = (Zl - Z0)/(Zl + Z0);
@@ -160,13 +161,19 @@ functionData_t* calculateAllValues(functionData_t* functionData, int vol, int re
             voltage[t + 1][z + 1] = C3 * (current[t + 1][z + 1] - current[t + 1][z]) + C4 * voltage[t][z + 1];
         }
         
-        voltage[t + 1][K] = voltage[t][K-1];
         
+        //boudry conditions
+        voltage[t + 1][K] = voltage[t][K-1];
+
+        if(Zl == 0)
+            voltage[t+1][K] = 0;
+
         if(Zl == 0)
             voltage[t+1][0] = voltage[t][1];
         else
             voltage[t + 1][0] = voltage[t][0] + (voltage[t+1][1]-voltage[t][0])*(Vph*dt-dz)/(Vph*dt+dz);
 
+        //reflection part
         if(!((t+1) % K) && (t+1) % (2*K)){
             powerL++;
             voltage[t + 1][K] += voltage[t][K-1] * powf64(_REFLECTION_LOAD, powerL) * powf64(_REFLECTION_SOURCE, powerS);
@@ -175,11 +182,7 @@ functionData_t* calculateAllValues(functionData_t* functionData, int vol, int re
         if(!((t+1) % (2*K))){
             powerS++;
             voltage[t + 1][0] += voltage[t][1] * powf64(_REFLECTION_LOAD, powerL) * powf64(_REFLECTION_SOURCE, powerS);
-        }
-
-        if(Zl == 0)
-            voltage[t+1][K] = 0;
-        
+        }        
 
     }
 
