@@ -6,27 +6,29 @@
 #include <QThreadPool>
 #include <QDebug>
 #include <unistd.h>
-#include "graph.h"
 
-class Animation : public QObject, public QRunnable
-{
+class Animation : public QObject, public QRunnable{
     Q_OBJECT
+
 public:
-    explicit Animation(Graph *graphs, QLabel *imShow, double min, double max, int steps, double delay);
+    explicit Animation(double min, double max, int steps, double delay);
+    void setRunning(bool running);
+    void setDelay(double delay);
+    void setEnding();
+    bool getRunning();
 
 signals:
     void Tfinished();
-
-public slots:
+    void updateGraphic(double d);
 
 private:
+    bool running;
+    bool ending;
+    double delay;
     double min;
     double max;
-    double delay;
     int steps;
-
-    QLabel *imShow;
-    Graph *graphs;
+    double d;
 
 protected:
     void run();

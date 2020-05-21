@@ -45,12 +45,23 @@ private slots:
 
     void animationZFinished();
     void animationTFinished();
+    void updateZ(double d);
+    void updateT(double d);
 
     void on_BtPlayT_clicked();
+    void on_BtPauseT_clicked();
+    void on_BtStopT_clicked();
 
     void on_BtPlayZ_clicked();
+    void on_BtPauseZ_clicked();
+    void on_BtStopZ_clicked();
+
+    void on_SlAnimationT_valueChanged(int value);
+    void on_SlAnimationZ_valueChanged(int value);
 
 private:
+    QThreadPool *thZ;
+    QThreadPool *thT;
     functionData_t *datas;
     Animation *animZ;
     Animation *animT;
