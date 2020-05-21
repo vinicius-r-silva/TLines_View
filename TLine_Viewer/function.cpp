@@ -77,13 +77,8 @@ functionData_t* calculateAllValues(functionData_t* FData, int vol, int res, doub
     const double C4 = 1;
 
 
-<<<<<<< HEAD
-    double Zl;
-    // const double Zl = 0;
-=======
     double Zl = 0;
     
->>>>>>> b1fba09d650c9f0f556d5c8901930aa95d2162f6
     if(res == ZERO)
         Zl = 0;
     else if(res == CEM)
