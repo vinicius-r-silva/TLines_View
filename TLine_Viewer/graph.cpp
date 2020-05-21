@@ -88,8 +88,8 @@ cv::Mat Graph::ZFixed_Graph(double z){
 void Graph::updateParameters(functionData_t *fdata, double nt, double nz, double dt, double dz){
     // max_vo = fdata->maxVoltage, min_vo = -fdata->minVoltage;
     // max_ic = fdata->maxCurrent, min_ic = -fdata->minCurrent;
-    max_vo = 5, min_vo = -5;
-    max_ic = 5, min_ic = -5;
+    max_vo = fdata->maxVoltage + 0.5, min_vo = -fdata->maxVoltage - 0.5;
+    max_ic = fdata->maxCurrent + 0.2, min_ic = -fdata->maxCurrent - 0.2;
     max_t = nt;
     max_z = nz;
 
