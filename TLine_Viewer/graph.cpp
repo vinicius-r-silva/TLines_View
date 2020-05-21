@@ -142,6 +142,9 @@ cv::Mat Graph::print_img(PrintParameters p){
     prev_vo = (printable_height / 2) - prev_vo;
     prev_ic = (printable_height / 2) - prev_ic;
 
+    double vo0px = (printable_height * max_vo) / range_vo;
+    double ic0px = (printable_height * max_ic) / range_ic;
+
     for(i = 1; i < printable_width * QTD_PER_PX; i ++){
         // if(dx * i < 1)
             // std::cout << "voltage: " << (this->*(p.voltage))(dx * i) << ",  current: " << (this->*(p.current))(dx * i) << std::endl;
@@ -149,8 +152,8 @@ cv::Mat Graph::print_img(PrintParameters p){
         vo = (this->*(p.voltage))(dx * i) * vo2px;
         ic = (this->*(p.current))(dx * i) * ic2px;
 
-        vo = (printable_height / 2) - vo;
-        ic = (printable_height / 2) - ic;
+        vo = vo0px - vo;
+        ic = ic0px - ic;
         
         px = i / QTD_PER_PX + s_y_label_size; 
         if(vo < 0) vo = 0;
