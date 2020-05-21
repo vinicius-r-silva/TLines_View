@@ -1,11 +1,11 @@
 #include "function.h"
 #include <iostream>
 
-void freeMemory(functionData_t* functionData){
+void freeMemory(functionData_t* FData){
     int t;
 
-    double **voltage = functionData->voltage;
-    double **current = functionData->current;
+    double **voltage = FData->voltage;
+    double **current = FData->current;
 
     for (t = 0; voltage[t] != nullptr; t++)
     {
@@ -16,7 +16,7 @@ void freeMemory(functionData_t* functionData){
     delete[] voltage;
     delete[] current;
 
-    delete functionData;
+    delete FData;
 
     std::cout << "ALL CLEAR\n";
 }
@@ -33,7 +33,7 @@ functionData_t* allocMemory(int vol, int res, double dt, double nt, double dz, d
     double **voltage;
     double **current;
 
-    functionData_t* functionData = new functionData_t;
+    functionData_t* FData = new functionData_t;
 
     voltage = new double *[N + 2];
     current = new double *[N + 2];
@@ -54,15 +54,15 @@ functionData_t* allocMemory(int vol, int res, double dt, double nt, double dz, d
     voltage[N + 1] = nullptr;
     current[N + 1] = nullptr;
 
-    functionData->voltage = voltage;
-    functionData->current = current;
+    FData->voltage = voltage;
+    FData->current = current;
 
-    return calculateAllValues(functionData, vol, res, dt, nt, dz, nz);
+    return calculateAllValues(FData, vol, res, dt, nt, dz, nz);
 
 }
 
 
-functionData_t* calculateAllValues(functionData_t* functionData, int vol, int res, double dt, double nt, double dz, double nz){
+functionData_t* calculateAllValues(functionData_t* FData, int vol, int res, double dt, double nt, double dz, double nz){
     int K = nz/dz;
     int N = nt/dt;
 
@@ -77,13 +77,14 @@ functionData_t* calculateAllValues(functionData_t* functionData, int vol, int re
     const double C4 = 1;
 
 
-    const double Zl = 0;
-    // if(res == ZERO)
-    //     Zl = 0;
-    // else if(res == CEM)
-    //     Zl = 100;
-    // else if(res == INFINITA)
-    //     Zl = std::numeric_limits<double>::max();
+    double Zl;
+    // const double Zl = 0;
+    if(res == ZERO)
+        Zl = 0;
+    else if(res == CEM)
+        Zl = 100;
+    else if(res == INFINITA)
+        Zl = std::numeric_limits<double>::max();
 
     const double _REFLECTION_SOURCE = (double) (Rs - Z0)/(Rs + Z0);
     const double _REFLECTION_LOAD = (Zl - Z0)/(Zl + Z0);
@@ -107,8 +108,8 @@ functionData_t* calculateAllValues(functionData_t* functionData, int vol, int re
     int t;
     int z;
 
-    double **voltage = functionData->voltage;
-    double **current = functionData->current;
+    double **voltage = FData->voltage;
+    double **current = FData->current;
 
     double minVoltage = 0;
     double maxVoltage = 2;
@@ -183,18 +184,18 @@ functionData_t* calculateAllValues(functionData_t* functionData, int vol, int re
 
     }
 
-    functionData->minVoltage = minVoltage;
-    functionData->maxVoltage = maxVoltage;
+    FData->minVoltage = minVoltage;
+    FData->maxVoltage = maxVoltage;
 
-    functionData->minCurrent = minCurrent;
-    functionData->maxCurrent = maxCurrent;    
+    FData->minCurrent = minCurrent;
+    FData->maxCurrent = maxCurrent;    
 
     std::cout << "calculo terminado" << std::endl;
 
-    return functionData;
+    return FData;
 }
 
-double getVoltage(functionData_t* functionData, double t, double z, double dt, double dz){
+double getVoltage(functionData_t* FData, double t, double z, double dt, double dz){
 
     static double debugT = -1;
     static double debugZ = -1;
@@ -206,7 +207,7 @@ double getVoltage(functionData_t* functionData, double t, double z, double dt, d
         debugT = nt;
 
 //        if(nz <= 50);
-//            std::cout << "v " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << functionData->voltage[nt][nz] << std::endl;
+//            std::cout << "v " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << FData->voltage[nt][nz] << std::endl;
 
     }
 
@@ -214,13 +215,13 @@ double getVoltage(functionData_t* functionData, double t, double z, double dt, d
         debugZ = nz;
 
 //        if(nz <= 50);
-//            std::cout << "v " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << functionData->voltage[nt][nz] << std::endl;
+//            std::cout << "v " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << FData->voltage[nt][nz] << std::endl;
 
     }
-    return functionData->voltage[nt][nz];
+    return FData->voltage[nt][nz];
 }
 
-double getCurrent(functionData_t* functionData, double t, double z, double dt, double dz){
+double getCurrent(functionData_t* FData, double t, double z, double dt, double dz){
     
     static double debugT = -1;
     static double debugZ = -1;
@@ -232,16 +233,16 @@ double getCurrent(functionData_t* functionData, double t, double z, double dt, d
         debugT = nt;
 
         //if(nz <= 50)
-         //   std::cout << "c " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << functionData->current[nt][nz] << std::endl;
+         //   std::cout << "c " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << FData->current[nt][nz] << std::endl;
     }
 
     if(debugZ != nz){
         debugZ = nz;
 
 //        if(nz <= 50)
-//            std::cout << "c " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << functionData->current[nt][nz] << std::endl;
+//            std::cout << "c " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << FData->current[nt][nz] << std::endl;
 
     }
     
-    return functionData->current[nt][nz];
+    return FData->current[nt][nz];
 }

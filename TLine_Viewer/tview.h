@@ -69,6 +69,7 @@ private:
     Graph *graphs;
 
     bool changed;
+    bool startingUp;
     double dtPrev;
     double dzPrev;
     double ntPrev;

@@ -4,14 +4,15 @@
 #include <iostream>
 
 #define MAXMEMORY 2000000000 //2GB
-#define MAXDELAY 10000 * 1 // 10000*n -> n seconds
-#define NDELAY 100         // n times to animation
+#define MAXDELAY 1 // 10000*n -> n seconds
+#define NDELAY 100000         // n times to animation
 
 TView::TView(QWidget *parent) : QMainWindow(parent),
     ui(new Ui::TView){
     //////////////////////////////////////////////////////////////////////////////////////////
     // SET THE UI PARAMETERS AND SOME ICONS TO INTERFACE
 
+    startingUp = true;
     ui->setupUi(this);
 
     this->setStyleSheet("background-color: white;");
@@ -102,6 +103,7 @@ TView::TView(QWidget *parent) : QMainWindow(parent),
     updateTGraphic();
     updateZGraphic();
 
+    startingUp = false;
 }
 
 TView::~TView() {
@@ -205,7 +207,7 @@ void TView::updateZGraphic(){
 }
 
 void TView::on_BtRecalcular_clicked(){
-    if(changed){
+    if(changed && !startingUp){
         if(parametersValid()){
             if(thT->activeThreadCount() > 0){
                 animT->setEnding();
@@ -246,6 +248,7 @@ void TView::on_firstV_clicked(){
     if(ui->firstV->isChecked() && vol != CONTINUA){
         vol = CONTINUA;
         changed = true;
+        on_BtRecalcular_clicked();
     }
 }
 
@@ -253,6 +256,7 @@ void TView::on_secondV_clicked(){
     if(ui->secondV->isChecked() && vol != DEGRAU){
         vol = DEGRAU;
         changed = true;
+        on_BtRecalcular_clicked();
     }
 }
 
@@ -260,6 +264,7 @@ void TView::on_firstR_clicked(){
     if(ui->firstR->isChecked() && res != INFINITA){
        res = INFINITA;
         changed = true;
+        on_BtRecalcular_clicked();
     }
 }
 
@@ -267,6 +272,7 @@ void TView::on_secondR_clicked(){
     if(ui->secondR->isChecked() && res != ZERO){
         res = ZERO;
         changed = true;
+        on_BtRecalcular_clicked();
     }
 }
 
@@ -274,6 +280,7 @@ void TView::on_thirdR_clicked(){
     if(ui->thirdR->isChecked() && res != CEM){
         res = CEM;
         changed = true;
+        on_BtRecalcular_clicked();
     }
 }
 
@@ -348,6 +355,7 @@ void TView::on_dT_textChanged(const QString &arg1){
         if(dT != dt && dT != 0){
             dt = dT;
             changed = true;
+            on_BtRecalcular_clicked();
         }
 
     }catch(std::invalid_argument e){
@@ -372,6 +380,7 @@ void TView::on_nT_textChanged(const QString &arg1){
         if(nT != nt && nT != 0){
             nt = nT;
             changed = true;
+            on_BtRecalcular_clicked();
         }
     }catch(std::invalid_argument e){
 
@@ -395,6 +404,7 @@ void TView::on_dZ_textChanged(const QString &arg1){
         if(dZ != dz && dZ != 0){
             dz = dZ;
             changed = true;
+            on_BtRecalcular_clicked();
         }
     }catch(std::invalid_argument e){
 
@@ -418,6 +428,7 @@ void TView::on_nZ_textChanged(const QString &arg1){
         if(nZ != nz && nZ != 0){
             nz = nZ;
             changed = true;
+            on_BtRecalcular_clicked();
         }
 
     }catch(std::invalid_argument e){
