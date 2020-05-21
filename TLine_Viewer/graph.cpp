@@ -86,10 +86,12 @@ cv::Mat Graph::ZFixed_Graph(double z){
 }
 
 void Graph::updateParameters(functionData_t *fdata, double nt, double nz, double dt, double dz){
-    // max_vo = fdata->maxVoltage, min_vo = -fdata->minVoltage;
-    // max_ic = fdata->maxCurrent, min_ic = -fdata->minCurrent;
-    max_vo = fdata->maxVoltage + 0.5, min_vo = -fdata->maxVoltage - 0.5;
-    max_ic = fdata->maxCurrent + 0.2, min_ic = -fdata->maxCurrent - 0.2;
+    double max = (fdata->maxVoltage > fdata->maxCurrent) ? fdata->maxVoltage : fdata->maxCurrent;
+    double min = (fdata->minVoltage < fdata->minCurrent) ? fdata->minVoltage : fdata->minCurrent;
+
+    max += 0.5; min -= 0.5;
+    max_vo = max; min_vo = min;
+    max_ic = max; min_ic = min;
     max_t = nt;
     max_z = nz;
 
@@ -103,7 +105,7 @@ void Graph::updateParameters(functionData_t *fdata, double nt, double nz, double
 }
 
 cv::Mat Graph::print_img(PrintParameters p){
-    int i = 0;
+    int i = 0, j = 0;
     int px = 0;
     double vo,ic;
 
@@ -188,8 +190,19 @@ cv::Mat Graph::print_img(PrintParameters p){
         cv::putText(image, value, cv::Point(i + s_y_label_size - textSize.width, s_height - 5), cv::FONT_HERSHEY_PLAIN, 1 * SCALE, black, 1 * SCALE);
     }
     
-    i = s_y_label_dist;
-    for(; i < s_height - s_y_label_dist; i += s_y_label_dist){
+
+    double dist = 0;
+    for(dist = 0; dist < 10; dist += 0.25){
+        if(dist * vo2px >= s_y_label_dist)
+            break;
+    }
+    dist *= vo2px;
+
+    i = -10 * vo2px;
+    for(; i < s_height - s_y_label_dist; i += dist){
+        if(i < s_y_label_dist)
+            continue;
+
         sprintf(value, "%6.1f", dvo * i + min_vo);
         textSize = getTextSize(value, cv::FONT_HERSHEY_PLAIN, 1 * SCALE, 1 * SCALE, 0);
         cv::putText(image, value, cv::Point(0, printable_height - i + textSize.height), cv::FONT_HERSHEY_PLAIN, 1 * SCALE, vo_color, 1 * SCALE);
@@ -198,6 +211,7 @@ cv::Mat Graph::print_img(PrintParameters p){
         textSize = getTextSize(value, cv::FONT_HERSHEY_PLAIN, 1 * SCALE, 1 * SCALE, 0);
         cv::putText(image, value, cv::Point(60 * SCALE, printable_height - i + textSize.height), cv::FONT_HERSHEY_PLAIN, 1 * SCALE, ic_color, 1 * SCALE);
     }
+    
 
 
     //Subtitle

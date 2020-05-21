@@ -113,7 +113,7 @@ functionData_t* calculateAllValues(functionData_t* FData, int vol, int res, doub
     double **current = FData->current;
 
     double minVoltage = 0;
-    double maxVoltage = 5;
+    double maxVoltage = 2;
 
     double minCurrent = 0;
     double maxCurrent = 2.0 / (Z0 + Zl + Rs);
@@ -219,21 +219,21 @@ double getVoltage(functionData_t* FData, double t, double z, double dt, double d
     int nt = t/dt;
     int nz = z/dz;
     
-    if(debugT != nt){
-        debugT = nt;
-
-       if(nz <= 50);
-           std::cout << "v " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << FData->voltage[nt][nz] << std::endl;
-
-    }
-
-    if(debugZ != nz){
-        debugZ = nz;
+//     if(debugT != nt){
+//         debugT = nt;
 
 //        if(nz <= 50);
 //            std::cout << "v " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << FData->voltage[nt][nz] << std::endl;
 
-    }
+//     }
+
+//     if(debugZ != nz){
+//         debugZ = nz;
+
+// //        if(nz <= 50);
+// //            std::cout << "v " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << FData->voltage[nt][nz] << std::endl;
+
+//     }
     return FData->voltage[nt][nz];
 }
 
@@ -245,20 +245,20 @@ double getCurrent(functionData_t* FData, double t, double z, double dt, double d
     int nt = t/dt;
     int nz = z/dz;
     
-    if(debugT != nt){
-        debugT = nt;
+//     if(debugT != nt){
+//         debugT = nt;
 
-        //if(nz <= 50)
-         //   std::cout << "c " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << FData->current[nt][nz] << std::endl;
-    }
+//         //if(nz <= 50)
+//          //   std::cout << "c " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << FData->current[nt][nz] << std::endl;
+//     }
 
-    if(debugZ != nz){
-        debugZ = nz;
+//     if(debugZ != nz){
+//         debugZ = nz;
 
-//        if(nz <= 50)
-//            std::cout << "c " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << FData->current[nt][nz] << std::endl;
+// //        if(nz <= 50)
+// //            std::cout << "c " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << FData->current[nt][nz] << std::endl;
 
-    }
+//     }
     
     return FData->current[nt][nz];
 }
