@@ -1,4 +1,5 @@
 #include "animation.h"
+#include <iostream>
 
 Animation::Animation(double min, double max, int steps, double delay){
     this->min = min;
@@ -28,7 +29,6 @@ void Animation::run(){
     }
 
     emit Tfinished();
-
 }
 
 bool Animation::getRunning(){

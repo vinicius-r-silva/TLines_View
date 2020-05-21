@@ -4,7 +4,8 @@
 #include <iostream>
 
 #define MAXMEMORY 2000000000 //2GB
-#define MAXDELAY 10000 * 2 // 10000*n -> n seconds
+#define MAXDELAY 10000 * 1 // 10000*n -> n seconds
+#define NDELAY 100         // n times to animation
 
 TView::TView(QWidget *parent) : QMainWindow(parent),
     ui(new Ui::TView){
@@ -87,8 +88,8 @@ TView::TView(QWidget *parent) : QMainWindow(parent),
     thZ->setExpiryTimeout(-1);
     thT->setExpiryTimeout(-1);
 
-    animZ = new Animation(0.0, nt, 10, (double)(ui->SlAnimationZ->value() * MAXDELAY ));
-    animT = new Animation(0.0, nz, 10, (double)(ui->SlAnimationT->value() * MAXDELAY ));
+    animT = new Animation(0.0, nz, NDELAY, (double)(ui->SlAnimationT->value() * MAXDELAY));
+    animZ = new Animation(0.0, nt, NDELAY, (double)(ui->SlAnimationZ->value() * MAXDELAY));
 
     QObject::connect(animZ, SIGNAL(Tfinished()), this, SLOT(animationZFinished()));
     QObject::connect(animZ, SIGNAL(updateGraphic(double)), this, SLOT(updateZ(double)));
@@ -115,7 +116,7 @@ void TView::updateZ(double d){
 }
 
 void TView::updateT(double d){
-    ui->SliderT->setValue(d * 100000000);
+    ui->SliderZ->setValue(d);
 }
 
 void TView::animationZFinished(){
@@ -206,6 +207,16 @@ void TView::updateZGraphic(){
 void TView::on_BtRecalcular_clicked(){
     if(changed){
         if(parametersValid()){
+            if(thT->activeThreadCount() > 0){
+                animT->setEnding();
+                animT->setRunning(true);
+            }
+
+            if(thZ->activeThreadCount() > 0){
+                animZ->setEnding();
+                animZ->setRunning(true);
+            }
+
             changed = false;
             freeMemory(datas);
             datas = allocMemory(vol, res, dt, nt, dz, nz);
@@ -216,7 +227,6 @@ void TView::on_BtRecalcular_clicked(){
             ntPrev = nt;
             dzPrev = dz;
             nzPrev = nz;
-            QMessageBox::information(this, tr("CONFIRMATION"), tr("Tudo enviado e atualizado"));
         }else{
             QMessageBox::warning(this, tr("ERROR BOX"), tr("Parametros ultrapassam o limite da memória"));
             ui->dT->setText(QString::number(dtPrev));
