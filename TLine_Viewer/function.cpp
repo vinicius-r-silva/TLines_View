@@ -183,7 +183,12 @@ functionData_t* calculateAllValues(functionData_t* FData, int vol, int res, doub
             std::cout << "t(carga): " << t+1 << std::endl;
             // getc(stdin);
             voltage[t + 1][K-1] += voltage[t][K-2] * powf64(_REFLECTION_LOAD, powerL) * powf64(_REFLECTION_SOURCE, powerS);
-            voltage[t + 1][K] += voltage[t + 1][K-1] * powf64(_REFLECTION_LOAD, powerL) * powf64(_REFLECTION_SOURCE, powerS);
+            
+            if(Zl < 10000)
+                voltage[t + 1][K] += voltage[t + 1][K-1] * powf64(_REFLECTION_LOAD, powerL) * powf64(_REFLECTION_SOURCE, powerS);
+            else 
+                voltage[t + 1][K] = voltage[t + 1][K-1];
+
         }
         
         if(!((t+1) % (2*K))){
