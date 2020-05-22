@@ -128,10 +128,10 @@ functionData_t* calculateAllValues(functionData_t* FData, int vol, int res, doub
     double **current = FData->current;
 
     double minVoltage = 0;
-    double maxVoltage = 2;
+    double maxVoltage = 0;
 
     double minCurrent = 0;
-    double maxCurrent = 2.0 / (Z0 + Zl + Rs);
+    double maxCurrent = 0;
 
 
     std::cout << "iniciando calculo" << std::endl;
