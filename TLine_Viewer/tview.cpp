@@ -4,7 +4,8 @@
 #include <iostream>
 
 #define MAXMEMORY 2000000000 //2GB
-#define MAXDELAY 1 // 10000*n -> n seconds
+#define ZDELAY 3
+#define TDELAY 1 // 10000*n -> n seconds
 #define NDELAY 100000         // n times to animation
 
 TView::TView(QWidget *parent) : QMainWindow(parent),
@@ -89,8 +90,8 @@ TView::TView(QWidget *parent) : QMainWindow(parent),
     thZ->setExpiryTimeout(-1);
     thT->setExpiryTimeout(-1);
 
-    animT = new Animation(0.0, nz, NDELAY, (double)(ui->SlAnimationT->value() * MAXDELAY));
-    animZ = new Animation(0.0, nt, NDELAY, (double)(ui->SlAnimationZ->value() * MAXDELAY));
+    animT = new Animation(0.0, nz, NDELAY, (double)(ui->SlAnimationT->value() * TDELAY));
+    animZ = new Animation(0.0, nt, NDELAY, (double)(ui->SlAnimationZ->value() * ZDELAY));
 
     QObject::connect(animZ, SIGNAL(Tfinished()), this, SLOT(animationZFinished()));
     QObject::connect(animZ, SIGNAL(updateGraphic(double)), this, SLOT(updateZ(double)));
@@ -131,12 +132,12 @@ void TView::animationTFinished(){
 
 void TView::on_SlAnimationT_valueChanged(int value){
     if(animT != nullptr)
-        animT->setDelay((double)(value * MAXDELAY));
+        animT->setDelay((double)(value * TDELAY));
 }
 
 void TView::on_SlAnimationZ_valueChanged(int value){
     if(animZ != nullptr)
-        animZ->setDelay((double)(value * MAXDELAY));
+        animZ->setDelay((double)(value * ZDELAY));
 }
 
 void TView::on_BtPlayT_clicked(){
