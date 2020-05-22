@@ -21,6 +21,13 @@ void freeMemory(functionData_t* FData){
     std::cout << "ALL CLEAR\n";
 }
 
+double continueFunction(int nt, double limit){
+    return 2;
+}
+
+double stepFunction(int nt, double limit){
+    return (nt >= limit) ? 0 : 1;
+}
 
 functionData_t* allocMemory(int vol, int res, double dt, double nt, double dz, double nz){
 
@@ -32,6 +39,7 @@ functionData_t* allocMemory(int vol, int res, double dt, double nt, double dz, d
 
     double **voltage;
     double **current;
+
 
     functionData_t* FData = new functionData_t;
 
@@ -66,6 +74,8 @@ functionData_t* calculateAllValues(functionData_t* FData, int vol, int res, doub
     int K = nz/dz;
     int N = nt/dt;
 
+    const double limit = 10*K;
+
     //const double C1 = (-2.0*dt) / (dt*dz*_R + 2*dz*L);
     //const double C2 = (2.0*L - dt*_R) / (2*L + dt*_R);
     //const double C3 = (-2.0*dt) / (dt*dz*_G + 2*dz*C);
@@ -76,6 +86,12 @@ functionData_t* calculateAllValues(functionData_t* FData, int vol, int res, doub
     const double C3 = -dt / (dz*C);
     const double C4 = 1;
 
+    voltageFunction funcPrt;
+
+    if(vol == CONTINUA)
+        funcPrt = &continueFunction;
+    else if(vol == DEGRAU)
+        funcPrt = &stepFunction;
 
     double Zl = 0;
 
@@ -103,8 +119,7 @@ functionData_t* calculateAllValues(functionData_t* FData, int vol, int res, doub
     std::cout << "C4: "<< C4 << std::endl;
 
     std::cout << "Vph: "<< Vph << std::endl;
-    std::cout << "_REFLECTION_LOAD: "<< _REFLECTION_LOAD << std::endl;
-    std::cout << "_REFLECTION_SOURCE: "<< _REFLECTION_SOURCE << std::endl;
+    std::cout << "limit: "<< limit << std::endl;
 
     int t;
     int z;
@@ -142,7 +157,7 @@ functionData_t* calculateAllValues(functionData_t* FData, int vol, int res, doub
     
     for (t = 1; t < N; t++)
     {
-        voltage[t][0] = (1-B1)*voltage[t-1][0]/-C3 - 2*current[t-1][0] + 2.0*2/Rs;
+        voltage[t][0] = (1-B1)*voltage[t-1][0]/-C3 - 2*current[t-1][0] + 2.0*funcPrt(t, limit)/Rs;
         voltage[t][0] *= -C3;
     
         for (z = 1; z < K; z++)

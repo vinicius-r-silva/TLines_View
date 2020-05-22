@@ -28,6 +28,8 @@ const double L = 1.85185 * powf64x(10, -7);
 
 const double Vph = 1/sqrt(C*L);
 
+typedef double (*voltageFunction)(int t, double limit);
+
 typedef struct functionData_t{
 
     double **voltage;
@@ -40,6 +42,9 @@ typedef struct functionData_t{
     double maxVoltage;
 
 }functionData_t;
+
+double stepFunction(int nt);
+double pulseFunction(int nt);
 
 void freeMemory(functionData_t* functionData);
 functionData_t* allocMemory(int vol, int res, double dt, double nt, double dz, double nz);

@@ -55,8 +55,8 @@ TView::TView(QWidget *parent) : QMainWindow(parent),
     ui->zLine->setText(QString::number(zFix));
     ui->tLine->setText(QString::number(tFix));
 
-    ui->dT->setText(QString::number(0.00000000027));
-    ui->nT->setText(QString::number(0.000003));
+    ui->dT->setText(QString::number(0.0000000003));
+    ui->nT->setText(QString::number(0.000005));
     ui->dZ->setText(QString::number(0.1));
     ui->nZ->setText(QString::number(100));
 
