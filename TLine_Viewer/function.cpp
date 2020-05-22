@@ -123,66 +123,60 @@ functionData_t* calculateAllValues(functionData_t* FData, int vol, int res, doub
 
     for (t = 0; t < N + 1; t++)
     {
-        for (z = 0; z < K+1; z++){
+        for (z = 0; z < K + 1; z++){
             current[t][z] = 0;
             voltage[t][z] = 0;
         }
     }
-
-    //inicial values
-    voltage[0][0] = 2.0 * Z0/(Z0+Rs);
-    current[0][0] = 0;//2.0 / (Z0 + Zl + Rs);
-
     
-    for (z = 1; z < K + 1; z++)
-    {
-        voltage[0][z] = 0;
-        current[0][z] = 0;
-    }
-    
-    std::cout << "parte inicial completa" << std::endl;
-
-    //  C1 = -0.01998
-    //  C2 = 1;
-    //  C3 = -49.95
-    //  C4 = 1;
     int powerL = 0;
     int powerS = 0;
 
-    for (t = 0; t < N; t++)
-    {
-        for (z = 0; z < K; z++){
-            current[t + 1][z] = C1 * (voltage[t][z + 1] - voltage[t][z]) + C2 * current[t][z];
-        }
+    voltage[0][0] = 0;
+    current[0][0] = 0;
+    
+    const long double B1 = 2*dt/(Rs*C*dz);
+    const long double B2 = 2*dt/(Zl*C*dz);
+    const long double _r = dt*dt/(L*C*dz*dz);
 
-        for (z = 0; z < K - 1; z++){
-            voltage[t + 1][z + 1] = C3 * (current[t + 1][z + 1] - current[t + 1][z]) + C4 * voltage[t][z + 1];
-        }
-            
-        // boundary conditions
-        voltage[t + 1][K] = voltage[t][K-1];
+    
+    for (t = 1; t < N; t++)
+    {
+        voltage[t][0] = (1-B1)*voltage[t-1][0]/-C3 - 2*current[t-1][0] + 2.0*2/Rs;
+        voltage[t][0] *= -C3;
+    
+        for (z = 1; z < K; z++)
+        {
+            voltage[t][z] = voltage[t-1][z]/-C3 - (current[t-1][z] - current[t-1][z-1]);
+            voltage[t][z] *= -C3;
+
+            if(voltage[t][z] > maxVoltage)
+                maxVoltage = voltage[t][z];
+            else if(voltage[t][z] < minVoltage)
+                minVoltage = voltage[t][z];
+        }        
+
+        voltage[t][K] = (1-B2)*voltage[t-1][K]/-C3 + 2*current[t-1][K-1];
+        voltage[t][K] *= -C3;
 
         if(res == ZERO){
-            voltage[t+1][K-1] = 0;
-            voltage[t+1][0] = voltage[t][1];
-        }else
-            voltage[t + 1][0] = voltage[t][1] + (voltage[t+1][1]-voltage[t][0])*(Vph*dt-dz)/(Vph*dt+dz);
-
-        //reflection part
-        if(!((t+1) % K) && (t+1) % (2*K)){
-            powerL++;
-            voltage[t + 1][K-1] += voltage[t][K-2] * (powf64(_REFLECTION_LOAD, powerL) * powf64(_REFLECTION_SOURCE, powerS));
-            voltage[t + 1][K] = voltage[t + 1][K-1];
-            
+            voltage[t][K] = 0;
         }
         
-        if(!((t+1) % (2*K))){
-            powerS++;
-            voltage[t + 1][0] += voltage[t][1] * powf64(_REFLECTION_LOAD, powerL) * powf64(_REFLECTION_SOURCE, powerS);
+
+        for (z = 0; z < K; z++)
+        {
+            current[t][z] = current[t-1][z] - _r*(voltage[t][z+1]/-C3 - voltage[t][z]/-C3);
+            
+            if(current[t][z] > maxCurrent)
+                maxCurrent = current[t][z];
+            else if(current[t][z] < minCurrent)
+                minCurrent = current[t][z];
         }
-
+        
+        
     }
-
+    
     FData->minVoltage = minVoltage;
     FData->maxVoltage = maxVoltage;
 
@@ -196,52 +190,16 @@ functionData_t* calculateAllValues(functionData_t* FData, int vol, int res, doub
 
 double getVoltage(functionData_t* FData, double t, double z, double dt, double dz){
 
-    static double debugT = -1;
-    static double debugZ = -1;
-
     int nt = t/dt;
     int nz = z/dz;
     
-//     if(debugT != nt){
-//         debugT = nt;
-
-//        if(nz <= 50);
-//            std::cout << "v " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << FData->voltage[nt][nz] << std::endl;
-
-//     }
-
-//     if(debugZ != nz){
-//         debugZ = nz;
-
-// //        if(nz <= 50);
-// //            std::cout << "v " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << FData->voltage[nt][nz] << std::endl;
-
-//     }
     return FData->voltage[nt][nz];
 }
 
 double getCurrent(functionData_t* FData, double t, double z, double dt, double dz){
     
-    static double debugT = -1;
-    static double debugZ = -1;
-
     int nt = t/dt;
     int nz = z/dz;
-    
-//     if(debugT != nt){
-//         debugT = nt;
-
-//         //if(nz <= 50)
-//          //   std::cout << "c " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << FData->current[nt][nz] << std::endl;
-//     }
-
-//     if(debugZ != nz){
-//         debugZ = nz;
-
-// //        if(nz <= 50)
-// //            std::cout << "c " << "t: " << t << ", dt: " << dt << ", z: " << z << ", dz: "  << dz << ", nt: " << nt << ",  nz: " << nz << ", value: " << FData->current[nt][nz] << std::endl;
-
-//     }
     
     return FData->current[nt][nz];
 }
