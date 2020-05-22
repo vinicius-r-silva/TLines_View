@@ -198,7 +198,7 @@ cv::Mat Graph::print_img(PrintParameters p){
     }
     dist *= vo2px;
 
-    i = -10 * vo2px;
+    i = vo0px - 10*dist;
     for(; i < s_height - s_y_label_dist; i += dist){
         if(i < s_y_label_dist)
             continue;
