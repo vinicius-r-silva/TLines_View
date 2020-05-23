@@ -4,7 +4,7 @@
 #include <iostream>
 
 #define MAXMEMORY 2000000000 //2GB
-#define ZDELAY 3
+#define ZDELAY 1
 #define TDELAY 1 // 10000*n -> n seconds
 #define NDELAY 100000         // n times to animation
 
@@ -57,10 +57,11 @@ TView::TView(QWidget *parent) : QMainWindow(parent),
     ui->tLine->setText(QString::number(tFix));
 
     ui->dT->setText(QString::number(0.0000000003));
-    ui->nT->setText(QString::number(0.000005));
+    //ui->nT->setText(QString::number(0.000005));
     ui->dZ->setText(QString::number(0.1));
     ui->nZ->setText(QString::number(100));
-
+    ui->nT->setText(QString::number(10.0*nz*dt/dz));
+    
     dtPrev = dt;
     ntPrev = nt;
     dzPrev = dz;

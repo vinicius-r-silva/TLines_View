@@ -74,7 +74,7 @@ functionData_t* calculateAllValues(functionData_t* FData, int vol, int res, doub
     int K = nz/dz;
     int N = nt/dt;
 
-    const double limit = 10*K;
+    const double limit = K / 10.0;
 
     //const double C1 = (-2.0*dt) / (dt*dz*_R + 2*dz*L);
     //const double C2 = (2.0*L - dt*_R) / (2*L + dt*_R);
