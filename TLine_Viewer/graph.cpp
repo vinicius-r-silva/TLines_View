@@ -86,12 +86,14 @@ cv::Mat Graph::ZFixed_Graph(double z){
 }
 
 void Graph::updateParameters(functionData_t *fdata, double nt, double nz, double dt, double dz){
-    double max = (fdata->maxVoltage > fdata->maxCurrent) ? fdata->maxVoltage : fdata->maxCurrent;
-    double min = (fdata->minVoltage < fdata->minCurrent) ? fdata->minVoltage : fdata->minCurrent;
+    // double max = (fdata->maxVoltage > fdata->maxCurrent) ? fdata->maxVoltage : fdata->maxCurrent;
+    // double min = (fdata->minVoltage < fdata->minCurrent) ? fdata->minVoltage : fdata->minCurrent;
 
-    max += 0.5; min -= 0.5;
-    max_vo = max; min_vo = min;
-    max_ic = max; min_ic = min;
+    // max += 0.5; min -= 0.5;
+    double maxV = fdata->maxVoltage + 0.5;      double minV = fdata->minVoltage - 0.5;
+    double maxC = fdata->maxCurrent + 0.05;     double minC = fdata->minCurrent - 0.05;
+    max_vo = maxV;  min_vo = minV;
+    max_ic = maxC;  min_ic = minV*maxC/maxV;
     max_t = nt;
     max_z = nz;
 
@@ -191,15 +193,18 @@ cv::Mat Graph::print_img(PrintParameters p){
     }
     
 
+
+
+
     double dist = 0;
-    for(dist = 0; dist < 10; dist += 0.25){
+    for(dist = 0; dist < 10; dist += 0.125){
         if(dist * vo2px >= s_y_label_dist)
             break;
     }
     dist *= vo2px;
 
-    i = -10 * vo2px;
-    for(; i < s_height - s_y_label_dist; i += dist){
+    i = printable_height - vo0px - 10*dist;
+    for(; i < printable_height - s_y_label_dist; i += dist){
         if(i < s_y_label_dist)
             continue;
 
@@ -207,7 +212,7 @@ cv::Mat Graph::print_img(PrintParameters p){
         textSize = getTextSize(value, cv::FONT_HERSHEY_PLAIN, 1 * SCALE, 1 * SCALE, 0);
         cv::putText(image, value, cv::Point(0, printable_height - i + textSize.height), cv::FONT_HERSHEY_PLAIN, 1 * SCALE, vo_color, 1 * SCALE);
 
-        sprintf(value, "%6.1f", dic * i + min_ic);
+        sprintf(value, "%6.2f", dic * i + min_ic);
         textSize = getTextSize(value, cv::FONT_HERSHEY_PLAIN, 1 * SCALE, 1 * SCALE, 0);
         cv::putText(image, value, cv::Point(60 * SCALE, printable_height - i + textSize.height), cv::FONT_HERSHEY_PLAIN, 1 * SCALE, ic_color, 1 * SCALE);
     }
